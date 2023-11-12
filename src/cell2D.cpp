@@ -1,29 +1,31 @@
 #include "cell2D.h"
 
-cell2D::cell2D(Vector2 pos, Vector2 dimension, ElemCC::ColorVal paint){
-    calculateSize(pos,dimension);
-    painted = paint;
+#include "helper.h"
+cell2D::cell2D(Vector2 pos, Vector2 dimension, ElemCC::ColorVal paint) {
+  calculateSize(pos, dimension);
+  painted = paint;
 }
 
-void cell2D::calculateSize(Vector2 pos, Vector2 dimension){
-    cell_margin = dimension.x/C_MARG_RATIO;
-    sub_margin = dimension.x/SUB_MARG_RATIO;
-    cell.x = pos.x+cell_margin;
-    cell.y = pos.y+cell_margin;
-    cell.width = dimension.x-2*cell_margin;
-    cell.height = dimension.y-2*cell_margin;
-    subCell.x = cell.x + sub_margin;
-    subCell.y = cell.y + sub_margin;
-    subCell.width = cell.width-2*sub_margin;
-    subCell.height = cell.height-2*sub_margin;
+void cell2D::calculateSize(Vector2 pos, Vector2 dimension) {
+  cell_margin = dimension.x / C_MARG_RATIO;
+  sub_margin = dimension.x / SUB_MARG_RATIO;
 
+  cell.x = pos.x + cell_margin;
+  cell.y = pos.y + cell_margin;
+  cell.width = dimension.x - (2 * cell_margin);
+  cell.height = dimension.y - (2 * cell_margin);
+
+  subCell.x = cell.x + sub_margin;
+  subCell.y = cell.y + sub_margin;
+  subCell.width = cell.width - (2 * sub_margin);
+  subCell.height = cell.height - (2 * sub_margin);
 }
 
-void cell2D::drawCell2D(){
-    if (highlight){
-        DrawRectangleRec(cell,ElemCC::COLOUR_LOOKUP[ElemCC::CELL_HIGHLIGHT]);
-    }else{
-        DrawRectangleRec(cell,ElemCC::COLOUR_LOOKUP[painted]);
-    }
-    DrawRectangleRec(subCell,ElemCC::SUB_LOOKUP[painted]);
+void cell2D::drawCell2D() {
+  if (highlight) {
+    DrawRectangleRec(cell, ElemCC::COLOUR_LOOKUP[ElemCC::CELL_HIGHLIGHT]);
+  } else {
+    DrawRectangleRec(cell, ElemCC::COLOUR_LOOKUP[painted]);
+  }
+  DrawRectangleRec(subCell, ElemCC::SUB_LOOKUP[painted]);
 }
