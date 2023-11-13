@@ -1,19 +1,21 @@
 #include "grid2D.h"
-
 #include "helper.h"
+#include "outlinedDraw.h"
 
+// A grid made up of a collection if cells
+// Current implementation takes into account the size of the labels
 grid2D::grid2D(Vector2 loc, Vector2 board_size, Vector2 num_cells, Vector2 m_labels) {
   max_labels = m_labels;
   cell_num = num_cells;
   calculateGridSize(loc, board_size);
-  line_thickness = (base_thick + line_marg);
+  line_thickness = (base_thick + 2 * line_marg);
 
   Vector2 curr = origin;
   for (int i = 0; i < cell_num.y; i++) {
     cells.push_back(std::vector<cell2D>());
     for (int j = 0; j < cell_num.y; j++) {
 
-      cells[i].push_back(cell2D(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness), ElemCC::ColorVal::CELL_EMPTY));
+      cells[i].push_back(cell2D(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness)));
       curr.x += spacing.x;
     }
     curr.y += spacing.y;
@@ -21,6 +23,8 @@ grid2D::grid2D(Vector2 loc, Vector2 board_size, Vector2 num_cells, Vector2 m_lab
   }
 }
 
+// Calculate the dimensions and location of the grid
+// Intended for when grid is initiazed or re-sized
 void grid2D::calculateGridSize(Vector2 loc, Vector2 board_size) {
   spacing = divVec(board_size, addVec(cell_num, divVec(max_labels, 3)));
 
@@ -31,6 +35,7 @@ void grid2D::calculateGridSize(Vector2 loc, Vector2 board_size) {
   grid_size = subVec(board_size, label_thick);
 }
 
+// adjusts the size of cells, intended for when grid size or location is adjusted
 void grid2D::recalculateCellSize() {
   float line_thickness = (base_thick + line_marg);
   Vector2 curr = origin;
@@ -45,17 +50,21 @@ void grid2D::recalculateCellSize() {
   }
 }
 
+// Checks if the mouse is on the grid
 bool grid2D::onBoard(Vector2 screen_pos) {
   return (screen_pos.x >= origin.x) &&
          (screen_pos.x < origin.x + grid_size.x) &&
-         (screen_pos.y >= origin.y) && (screen_pos.y < origin.y + grid_size.y);
+         (screen_pos.y >= origin.y) &&
+         (screen_pos.y < origin.y + grid_size.y);
 }
 
+// Gets the cell at the given screen location
 cell2D *grid2D::getCell(Vector2 screen_pos) {
   Vector2 loc = getCellGridPos(screen_pos);
   return &(cells[loc.y][loc.x]);
 }
 
+// Gets the top left corner of the grid at the at the given grid coordinate
 Vector2 grid2D::getCellGridPos(Vector2 grid_pos) {
   Vector2 coords;
   coords.x = (int)((grid_pos.x - origin.x) / spacing.x);
@@ -63,6 +72,7 @@ Vector2 grid2D::getCellGridPos(Vector2 grid_pos) {
   return coords;
 }
 
+// Removes hilghting from all cells
 void grid2D::unhighlight() {
   for (unsigned int i = 0; i < cells.size(); i++) {
     for (unsigned int j = 0; j < cells[i].size(); j++) {
@@ -71,6 +81,7 @@ void grid2D::unhighlight() {
   }
 }
 
+// Draws the grid
 void grid2D::drawGrid2D() {
   for (std::vector<cell2D> row : cells) {
     for (cell2D entry : row) {
@@ -78,14 +89,15 @@ void grid2D::drawGrid2D() {
     }
   }
 
-  Vector2 curr_start = origin;
+  drawOutlineGridLines2D(origin, grid_size, cell_num, line_marg, line_thickness, colour);
+
+  /*Vector2 curr_start = origin;
   Vector2 curr_end = origin;
 
   curr_start.y -= (base_thick / 2) + line_marg;
   curr_end.y += grid_size.y + (base_thick / 2) + line_marg;
   for (int i = 0; i <= cell_num.y; i++) {
-    DrawLineEx(curr_start, curr_end, base_thick + 2 * line_marg,
-               ElemCC::COLOUR_LOOKUP[colour]);
+    DrawLineEx(curr_start, curr_end, line_thickness, ElemCC::COLOUR_LOOKUP[colour]);
 
     curr_start.x += spacing.x;
     curr_end.x += spacing.x;
@@ -93,12 +105,11 @@ void grid2D::drawGrid2D() {
 
   curr_start = origin;
   curr_end = origin;
-
   curr_start.x -= (base_thick / 2) + line_marg;
   curr_end.x += grid_size.x + (base_thick / 2) + line_marg;
+
   for (int i = 0; i <= cell_num.x; i++) {
-    DrawLineEx(curr_start, curr_end, base_thick + 2 * line_marg,
-               ElemCC::COLOUR_LOOKUP[colour]);
+    drawOutLineLine2D(curr_start, curr_end, line_marg, base_thick, colour);
 
     curr_start.y += spacing.y;
     curr_end.y += spacing.y;
@@ -106,25 +117,13 @@ void grid2D::drawGrid2D() {
 
   curr_start = origin;
   curr_end = origin;
+  curr_start.y -= (base_thick / 2) + line_marg;
+  curr_end.y += grid_size.y + (base_thick / 2) + line_marg;
 
-  curr_end.y += grid_size.y + (base_thick / 2);
-  curr_start.y -= (base_thick / 2);
   for (int i = 0; i <= cell_num.y; i++) {
-    DrawLineEx(curr_start, curr_end, base_thick, ElemCC::SUB_LOOKUP[colour]);
+    drawSubLine2D(curr_start, curr_end, line_marg, base_thick, colour);
 
     curr_start.x += spacing.x;
     curr_end.x += spacing.x;
-  }
-
-  curr_start = origin;
-  curr_end = origin;
-
-  curr_end.x += grid_size.x + (base_thick / 2);
-  curr_start.x -= (base_thick / 2);
-  for (int i = 0; i <= cell_num.x; i++) {
-    DrawLineEx(curr_start, curr_end, base_thick, ElemCC::SUB_LOOKUP[colour]);
-
-    curr_start.y += spacing.y;
-    curr_end.y += spacing.y;
-  }
+  }*/
 }

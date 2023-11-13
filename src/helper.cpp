@@ -1,4 +1,5 @@
 #include "helper.h"
+#include "cmath"
 
 int min(int a, int b) {
   if (a > b) return b;
@@ -94,3 +95,8 @@ int maxVec(Vector2 v1) { return max(v1.x, v1.y); }
 Vector2 setBothVec(float a) { return Vector2{a, a}; }
 
 bool vecEquals(Vector2 v1, Vector2 v2) { return v1.x == v2.x && v1.y == v2.y; }
+
+// angle in radians from x axis, origin at v1
+double vecAngle(Vector2 v1, Vector2 v2) {
+  return atan((v2.y - v1.y) / (v2.x - v1.x));
+}

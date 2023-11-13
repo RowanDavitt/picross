@@ -22,15 +22,16 @@ public:
   Vector2 max_labels;
   ElemCC::ColorVal colour = ElemCC::ColorVal::GRID_LINES;
   std::vector<std::vector<cell2D>> cells;
+
   grid2D(Vector2 loc, Vector2 grid_size, Vector2 num_cells, Vector2 m_labels);
   grid2D() {}
-  void drawGrid2D();
-  bool onBoard(Vector2 screen_pos);
+
   Vector2 getCellGridPos(Vector2 grid_pos);
   cell2D *getCell(Vector2 screen_pos);
+  void drawGrid2D();
+  bool onBoard(Vector2 screen_pos);
   void unhighlight();
   void calculateGridSize(Vector2 loc, Vector2 grid_size);
   void recalculateCellSize();
 };
-
 #endif

@@ -1,11 +1,11 @@
 #include "raylib.h"
 
+#ifndef HELPER
+#define HELPER
+
 int min(int a, int b);
-
 int max(int a, int b);
-
 int getSign(int a);
-
 bool colourEquals(Color c1, Color c2);
 
 Vector2 getFontSize(int width, Font font);
@@ -23,3 +23,5 @@ int myAbs(int a);
 int minVec(Vector2 v1);
 int maxVec(Vector2 v1);
 Vector2 setBothVec(float a);
+double vecAngle(Vector2 v1, Vector2 v2);
+#endif
