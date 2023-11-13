@@ -4,11 +4,9 @@
 
 // A grid made up of a collection if cells
 // Current implementation takes into account the size of the labels
-grid2D::grid2D(Vector2 loc, Vector2 board_size, Vector2 num_cells, Vector2 m_labels) {
-  max_labels = m_labels;
+grid2D::grid2D(Vector2 loc, Vector2 board_size, Vector2 num_cells) {
   cell_num = num_cells;
   calculateGridSize(loc, board_size);
-  line_thickness = (base_thick + 2 * line_marg);
 
   Vector2 curr = origin;
   for (int i = 0; i < cell_num.y; i++) {
@@ -26,18 +24,18 @@ grid2D::grid2D(Vector2 loc, Vector2 board_size, Vector2 num_cells, Vector2 m_lab
 // Calculate the dimensions and location of the grid
 // Intended for when grid is initiazed or re-sized
 void grid2D::calculateGridSize(Vector2 loc, Vector2 board_size) {
-  spacing = divVec(board_size, addVec(cell_num, divVec(max_labels, 3)));
+  spacing = divVec(board_size, cell_num);
 
-  Vector2 label_thick = scaleVec(divVec(spacing, 3), max_labels);
   base_thick = minVec(spacing) / THICK_RATIO;
   line_marg = base_thick / LINE_MARG_RATIO;
-  origin = addVec(loc, label_thick);
-  grid_size = subVec(board_size, label_thick);
+  line_thickness = (base_thick + 2 * line_marg);
+  origin = loc;
+  grid_size = board_size;
 }
 
 // adjusts the size of cells, intended for when grid size or location is adjusted
 void grid2D::recalculateCellSize() {
-  float line_thickness = (base_thick + line_marg);
+  float line_thickness = (base_thick + 2 * line_marg);
   Vector2 curr = origin;
   for (int i = 0; i < cell_num.y; i++) {
     for (int j = 0; j < cell_num.y; j++) {

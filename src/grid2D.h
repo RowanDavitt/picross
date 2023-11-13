@@ -19,11 +19,10 @@ public:
   Vector2 grid_size;
   Vector2 cell_num;
   Vector2 spacing;
-  Vector2 max_labels;
   ElemCC::ColorVal colour = ElemCC::ColorVal::GRID_LINES;
   std::vector<std::vector<cell2D>> cells;
 
-  grid2D(Vector2 loc, Vector2 grid_size, Vector2 num_cells, Vector2 m_labels);
+  grid2D(Vector2 loc, Vector2 grid_size, Vector2 num_cells);
   grid2D() {}
 
   Vector2 getCellGridPos(Vector2 grid_pos);

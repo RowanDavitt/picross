@@ -16,10 +16,12 @@ public:
   Vector2 num_cells;
   grid2D grid;
   labelSet labels;
-  const static int MARGIN_RATIO = 12;
-  int margin;
-  std::vector<std::vector<bool>> puzzle;
+  constexpr static float LABEL_HEIGHT_RATIO = 1.25; // to calculate label height relative to grid size
+  const static int GRID_MARGIN_RATIO = 5;           // ratio to calculate distance from edge of screen to grid
+  int label_height;
+  int grid_margin;
 
+  std::vector<std::vector<bool>> puzzle;
   gameBoard(std::vector<std::vector<bool>> *input_puzzle);
   gameBoard() {}
   void calculateGameBoard();

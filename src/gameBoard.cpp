@@ -5,10 +5,9 @@
 gameBoard::gameBoard(std::vector<std::vector<bool>> *input_puzzle) {
   puzzle = *input_puzzle;
   calculateGameBoard();
-  Vector2 max_labels = labelSet::getMaxSizeLabel(input_puzzle);
 
-  grid = grid2D(origin, board_size, num_cells, max_labels);
-  labels = labelSet(origin, board_size, grid.spacing, num_cells, grid.line_thickness, input_puzzle);
+  grid = grid2D(origin, board_size, num_cells);
+  labels = labelSet(origin, grid.spacing, num_cells, label_height, grid.line_thickness, input_puzzle);
 }
 
 // Recalculate the position and dimesnsions of the baords contents, adjust for a change to the board
@@ -17,17 +16,20 @@ void gameBoard::recalculateElements() {
   grid.calculateGridSize(origin, board_size);
   grid.recalculateCellSize();
 
-  labels.calculateSize(origin, board_size, grid.spacing, grid.line_thickness);
+  labels.calculateSize(origin, grid.spacing, label_height, grid.line_thickness);
 }
 
 // calculate the position and dimensions and location of the board
 // Intended for when the board is initialized or the window is resized
 void gameBoard::calculateGameBoard() {
-  margin = min(GetScreenHeight(), GetScreenWidth()) / MARGIN_RATIO;
+  grid_margin = min(GetScreenHeight(), GetScreenWidth()) / GRID_MARGIN_RATIO;
+  label_height = grid_margin / LABEL_HEIGHT_RATIO;
   float grid_base = min(GetScreenWidth(), GetScreenHeight());
-  origin = {((GetScreenWidth() - grid_base) / 2 + margin), ((GetScreenHeight() - grid_base) / 2 + margin)};
+
+  origin = {((GetScreenWidth() - grid_base) / 2 + grid_margin), ((GetScreenHeight() - grid_base) / 2 + grid_margin)};
 
   board_size = {(GetScreenWidth() - (2 * origin.x)), (GetScreenHeight() - (2 * origin.y))};
+  origin = addVec(origin, label_height / 2);
 
   num_cells = {(float)(puzzle)[0].size(), (float)(puzzle).size()};
 }

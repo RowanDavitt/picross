@@ -5,7 +5,7 @@
 
 namespace MyColour { // {r,g,b,a} format
 
-const Color SOLID_WHITE{120, 144, 133, 255};      // White, (it's acually grey)
+const Color SOLID_WHITE{93, 104, 103, 255};       // White, (it's acually grey)
 const Color GREYISH{187, 176, 190, 255};          // A light grey
 const Color SUBTLE_GREY{50, 10, 57, 255};         // Also grey (close to the bluey black)
 const Color LIGHT_GREY{130, 136, 133, 255};       // Even more grey

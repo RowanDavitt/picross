@@ -12,8 +12,8 @@ private:
 
 public:
   static const int STACK_SPACING = 8;
-  static const int CHAR_MARGIN_RATIO = 14;
-  float char_margin;
+  static const int CHAR_OUTLINE_RATIO = 8;
+  float char_outline;
   float line_thick;
   ElemCC::ColorVal text_colour = ElemCC::ColorVal::LABEL_TEXT;
   Vector2 spacing;
@@ -22,9 +22,9 @@ public:
   Vector2 char_size;
   Vector2 cell_num;
 
-  labelSet(Vector2 loc, Vector2 dimensions, Vector2 spacing, Vector2 num_cells, float l_thick, std::vector<std::vector<bool>> *input_puzzle);
+  labelSet(Vector2 loc, Vector2 spacing, Vector2 num_cells, int label_height, float l_thick, std::vector<std::vector<bool>> *input_puzzle);
   labelSet() {}
-  void calculateSize(Vector2 loc, Vector2 dimensions, Vector2 l_spacing, float l_thick);
+  void calculateSize(Vector2 loc, Vector2 l_spacing, int label_height, float l_thick);
   void makeLabelX(int col);
   void makeLabelY(int row);
   void drawYLabel();

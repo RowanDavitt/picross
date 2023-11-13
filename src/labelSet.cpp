@@ -2,7 +2,7 @@
 #include "helper.h"
 #include <string>
 
-labelSet::labelSet(Vector2 loc, Vector2 dimensions, Vector2 l_spacing, Vector2 num_cells, float l_thick, std::vector<std::vector<bool>> *input_puzzle) {
+labelSet::labelSet(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick, std::vector<std::vector<bool>> *input_puzzle) {
   cell_num = num_cells;
   puzzle = input_puzzle;
 
@@ -20,17 +20,20 @@ labelSet::labelSet(Vector2 loc, Vector2 dimensions, Vector2 l_spacing, Vector2 n
     makeLabelX(i);
     if (x_labels[i].size() > max_size.x) max_size.x = x_labels[i].size();
   }
-  calculateSize(loc, dimensions, l_spacing, l_thick);
+  calculateSize(loc, l_spacing, label_height, l_thick);
 }
 
-void labelSet::calculateSize(Vector2 loc, Vector2 dimensions, Vector2 l_spacing, float l_thick) {
+void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, int label_height, float l_thick) {
   line_thick = l_thick;
   spacing = l_spacing;
   off = addVec(loc, -line_thick / 2);
 
-  char_size = getFontSize((spacing.x / max_size.y) - (max_size.y * STACK_SPACING), GetFontDefault());
-  off = addVec(spacing, off);
-  char_margin = char_size.y / CHAR_MARGIN_RATIO;
+  // char_size = getFontSize((spacing.x / max_size.y) - (max_size.y * STACK_SPACING), GetFontDefault());
+
+  Vector2 char_prop = getMaxFontBox(GetFontDefault());
+  char_size.y = (label_height / max_size.y) - STACK_SPACING;
+  char_size.x = char_size.y * (char_prop.x / char_prop.y);
+  char_outline = char_size.y / CHAR_OUTLINE_RATIO;
 }
 
 void labelSet::makeLabelX(int col) {
@@ -102,8 +105,8 @@ void labelSet::drawXLabel() {
 // outlines text
 void labelSet::DrawSuperText(const char *text, Vector2 loc, int offset, Vector2 char_size, ElemCC::ColorVal text_colour) {
   loc.x += offset;
-  for (int i = -char_margin; i <= char_margin; i++)
-    for (int j = -char_margin; j <= char_margin; j++) {
+  for (int i = -char_outline; i <= char_outline; i++)
+    for (int j = -char_outline; j <= char_outline; j++) {
       DrawText(text, loc.x + i, loc.y + j, char_size.y, ElemCC::COLOUR_LOOKUP[text_colour]);
     }
 

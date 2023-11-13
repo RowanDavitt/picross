@@ -26,17 +26,16 @@ bool colourEquals(Color c1, Color c2) {
   return c1.a == c2.a && c1.r == c2.r && c1.g == c2.g && c1.b == c2.b;
 }
 
-Vector2 getFontSize(int width, Font font) {
+// Gets the height and width of the widest character at a defualt font size
+Vector2 getMaxFontBox(Font font) {
   Rectangle max_rec = {0, 0, 0, 0};
-  Vector2 f_size;
   for (int i = 0; i < font.glyphCount; i++) {
     if (font.recs[i].width > max_rec.width)
       max_rec = font.recs[i];
   }
-  f_size.x = width;
-  f_size.y = width * (max_rec.height / max_rec.width);
-  return f_size;
+  return Vector2{max_rec.width, max_rec.height};
 }
+
 Vector2 addVec(Vector2 v1, int cons) {
   v1.x += cons;
   v1.y += cons;
