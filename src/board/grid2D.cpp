@@ -1,6 +1,6 @@
 #include "grid2D.h"
-#include "helper.h"
-#include "outlinedDraw.h"
+#include "helper/helper.h"
+#include "helper/outlinedDraw.h"
 
 // A grid made up of a collection if cells
 // Current implementation takes into account the size of the labels

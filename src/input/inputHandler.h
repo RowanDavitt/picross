@@ -1,4 +1,4 @@
-#include "gameboard.h"
+#include "board/gameboard.h"
 #include "raylib.h"
 
 #ifndef INPUT_HANDLER

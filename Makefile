@@ -249,7 +249,7 @@ endif
 
 # Define include paths for required headers
 # NOTE: Several external required libraries (stb and others)
-INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
+INCLUDE_PATHS = -I. -I./src -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external
 
 # Define additional directories containing required header files
 ifeq ($(PLATFORM),PLATFORM_RPI)
@@ -353,7 +353,7 @@ SRC_DIR = src
 OBJ_DIR = obj
 
 # Define all object files from source files
-SRC = $(call rwildcard, *.cpp, *.h)
+SRC = $(call rwildcard, $(SRC_DIR)/*, *.cpp)
 OBJS = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 #OBJS ?= $(wildcard *.cpp)
 
@@ -378,7 +378,7 @@ $(PROJECT_NAME): $(OBJS)
 # Compile source files
 # NOTE: This pattern will compile every module defined on $(OBJS)
 #%.o: %.c
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) -c $< -o $@ $(CFLAGS) $(INCLUDE_PATHS) -D$(PLATFORM)
 
 # Clean everything

@@ -1,5 +1,5 @@
 #include "cell2D.h"
-#include "helper.h"
+#include "helper/helper.h"
 
 // Cells, the boxes inside of a grid
 // pos: is x y coord of top left corner

@@ -1,7 +1,7 @@
 #include "inputHandler.h"
-#include "cell2D.h"
-#include "grid2D.h"
-#include "helper.h"
+#include "board/cell2D.h"
+#include "board/grid2D.h"
+#include "helper/helper.h"
 
 inputHandler::inputHandler(gameBoard *in_board) {
   board = in_board;

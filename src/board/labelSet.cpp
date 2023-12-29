@@ -1,5 +1,5 @@
 #include "labelSet.h"
-#include "helper.h"
+#include "helper/helper.h"
 #include <string>
 
 labelSet::labelSet(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick, std::vector<std::vector<bool>> *input_puzzle) {

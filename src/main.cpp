@@ -19,12 +19,13 @@
  *
  ********************************************************************************************/
 
-#include "ColorConsts.h"
-#include "cell2D.h"
-#include "gameBoard.h"
-#include "grid2D.h"
-#include "helper.h"
-#include "inputHandler.h"
+#include "board/cell2D.h"
+#include "board/gameBoard.h"
+#include "board/grid2D.h"
+#include "helper/ColorConsts.h"
+#include "helper/helper.h"
+#include "input/fileInput.h"
+#include "input/inputHandler.h"
 #include "raylib.h"
 #include <iostream>
 #include <string>
@@ -124,6 +125,7 @@ static void UpdateDrawFrame(void) {
   EndMode2D();
 
   DrawFPS(10, 10);
+  DrawText(listPzLnames().c_str(), 10, 100, 30, WHITE);
 
   EndDrawing();
   //----------------------------------------------------------------------------------

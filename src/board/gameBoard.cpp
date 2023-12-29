@@ -1,5 +1,5 @@
 #include "gameBoard.h"
-#include "helper.h"
+#include "helper/helper.h"
 
 // The board the game is played from a usisng a 2D vector decribing the winning state
 gameBoard::gameBoard(std::vector<std::vector<bool>> *input_puzzle) {
