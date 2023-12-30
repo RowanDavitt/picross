@@ -25,6 +25,7 @@
 #include "helper/ColorConsts.h"
 #include "helper/helper.h"
 #include "input/fileInput.h"
+#include "input/filewriter.h"
 #include "input/inputHandler.h"
 #include "raylib.h"
 #include <iostream>
@@ -53,6 +54,7 @@ static void UpdateDrawFrame(void); // Update and draw one frame
 //----------------------------------------------------------------------------------
 int main() {
   std::vector<std::vector<bool>> input_puzzle = {{1, 0, 1, 1}, {1, 0, 0, 1}, {1, 1, 0, 1}, {0, 0, 1, 0}};
+  writePuzzleFile("puzzles/testing.pzl", &input_puzzle);
   // Initialization
   //--------------------------------------------------------------------------------------
   const int screenWidth = 1080;
