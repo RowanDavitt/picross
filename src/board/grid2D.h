@@ -28,9 +28,10 @@ public:
   Vector2 getCellGridPos(Vector2 grid_pos);
   cell2D *getCell(Vector2 screen_pos);
   void drawGrid2D();
-  bool onBoard(Vector2 screen_pos);
+  bool inGrid(Vector2 screen_pos);
   void unhighlight();
   void calculateGridSize(Vector2 loc, Vector2 grid_size);
   void recalculateCellSize();
+  void paintHighlighted(bool clear_mode, ElemCC::ColorVal painting_colour);
 };
 #endif

@@ -25,7 +25,6 @@
 #include "helper/ColorConsts.h"
 #include "helper/helper.h"
 #include "input/fileInput.h"
-#include "input/filewriter.h"
 #include "input/inputHandler.h"
 #include "raylib.h"
 #include <iostream>
@@ -53,8 +52,8 @@ static void UpdateDrawFrame(void); // Update and draw one frame
 // Main entry point
 //----------------------------------------------------------------------------------
 int main() {
-  std::vector<std::vector<bool>> input_puzzle = {{1, 0, 1, 1}, {1, 0, 0, 1}, {1, 1, 0, 1}, {0, 0, 1, 0}};
-  writePuzzleFile("puzzles/testing.pzl", &input_puzzle);
+  std::vector<std::vector<bool>> input_puzzle;
+  readPuzzleFile("puzzles/testing2.pzl", &input_puzzle);
   // Initialization
   //--------------------------------------------------------------------------------------
   const int screenWidth = 1080;
@@ -108,17 +107,8 @@ static void UpdateDrawFrame(void) {
 
   BeginMode2D(camera);
   //(*(board.getCell(GetMousePosition()))).painted = true;
-  if (IsWindowResized()) {
-    board.calculateGameBoard();
-    board.recalculateElements();
-  }
-
-  inputter.checkClick(MOUSE_BUTTON_LEFT, ElemCC::ColorVal::CELL_FILL);
-  inputter.checkClick(MOUSE_BUTTON_RIGHT, ElemCC::ColorVal::CELL_BLOCK);
-
-  if (board.checkWin()) {
-    DrawText("win", 10, 100, 20, RAYWHITE);
-  }
+  inputter.checkClick();
+  board.boardFrame();
 
   // if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) || IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) clear_paint = cell2D::EMPTY;
 

@@ -1,13 +1,17 @@
+#ifndef GAME_BOARD
+#define GAME_BOARD
 #include "grid2D.h"
 #include "helper/ColorConsts.h"
+#include "input/inputArea.h"
 #include "labelSet.h"
 #include "raylib.h"
 
-#ifndef GAME_BOARD
-#define GAME_BOARD
-
-class gameBoard {
+class gameBoard : public inputArea {
 public:
+  int board_hold = -1;
+  bool clear_mode;
+  Vector2 start_cell_coord;
+
   Vector2 spacing;
   Vector2 origin;
   Vector2 grid_size;
@@ -29,6 +33,11 @@ public:
   void drawGameBoard();
   std::vector<std::vector<bool>> getBoardState();
   bool checkWin();
+  void boardFrame();
+
+  bool inArea(Vector2 loc) override;
+  int pressInputDown(int button, Vector2 mouse_pos, int global_hold) override;
+  void pressInputUp(int button) override;
 };
 
 #endif

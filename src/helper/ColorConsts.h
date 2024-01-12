@@ -59,5 +59,11 @@ const Color SUB_LOOKUP[] = {
     MyColour::LIQUID_WHITE,       // Label Text
 
 };
+
+const ColorVal inputButtonColor[] = {
+    CELL_FILL,
+    CELL_BLOCK,
+};
+
 } // namespace ElemCC
 #endif

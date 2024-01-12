@@ -49,7 +49,7 @@ void grid2D::recalculateCellSize() {
 }
 
 // Checks if the mouse is on the grid
-bool grid2D::onBoard(Vector2 screen_pos) {
+bool grid2D::inGrid(Vector2 screen_pos) {
   return (screen_pos.x >= origin.x) &&
          (screen_pos.x < origin.x + grid_size.x) &&
          (screen_pos.y >= origin.y) &&
@@ -88,40 +88,56 @@ void grid2D::drawGrid2D() {
   }
 
   drawOutlineGridLines2D(origin, grid_size, cell_num, line_marg, line_thickness, colour);
+}
 
-  /*Vector2 curr_start = origin;
-  Vector2 curr_end = origin;
+/*Vector2 curr_start = origin;
+Vector2 curr_end = origin;
 
-  curr_start.y -= (base_thick / 2) + line_marg;
-  curr_end.y += grid_size.y + (base_thick / 2) + line_marg;
-  for (int i = 0; i <= cell_num.y; i++) {
-    DrawLineEx(curr_start, curr_end, line_thickness, ElemCC::COLOUR_LOOKUP[colour]);
+curr_start.y -= (base_thick / 2) + line_marg;
+curr_end.y += grid_size.y + (base_thick / 2) + line_marg;
+for (int i = 0; i <= cell_num.y; i++) {
+  DrawLineEx(curr_start, curr_end, line_thickness, ElemCC::COLOUR_LOOKUP[colour]);
 
-    curr_start.x += spacing.x;
-    curr_end.x += spacing.x;
+  curr_start.x += spacing.x;
+  curr_end.x += spacing.x;
+}
+
+curr_start = origin;
+curr_end = origin;
+curr_start.x -= (base_thick / 2) + line_marg;
+curr_end.x += grid_size.x + (base_thick / 2) + line_marg;
+
+for (int i = 0; i <= cell_num.x; i++) {
+  drawOutLineLine2D(curr_start, curr_end, line_marg, base_thick, colour);
+
+  curr_start.y += spacing.y;
+  curr_end.y += spacing.y;
+}
+
+curr_start = origin;
+curr_end = origin;
+curr_start.y -= (base_thick / 2) + line_marg;
+curr_end.y += grid_size.y + (base_thick / 2) + line_marg;
+
+for (int i = 0; i <= cell_num.y; i++) {
+  drawSubLine2D(curr_start, curr_end, line_marg, base_thick, colour);
+
+  curr_start.x += spacing.x;
+  curr_end.x += spacing.x;
+}*/
+
+void grid2D::paintHighlighted(bool clear_mode, ElemCC::ColorVal painting_colour) {
+  for (unsigned int i = 0; i < cells.size(); i++) {
+    for (unsigned int j = 0; j < cells[i].size(); j++) {
+      if (cells[i][j].highlight) {
+        if (!clear_mode) {
+          cells[i][j].painted = painting_colour;
+        } else {
+          if (cells[i][j].painted == painting_colour) {
+            cells[i][j].painted = ElemCC::ColorVal::CELL_EMPTY;
+          }
+        }
+      }
+    }
   }
-
-  curr_start = origin;
-  curr_end = origin;
-  curr_start.x -= (base_thick / 2) + line_marg;
-  curr_end.x += grid_size.x + (base_thick / 2) + line_marg;
-
-  for (int i = 0; i <= cell_num.x; i++) {
-    drawOutLineLine2D(curr_start, curr_end, line_marg, base_thick, colour);
-
-    curr_start.y += spacing.y;
-    curr_end.y += spacing.y;
-  }
-
-  curr_start = origin;
-  curr_end = origin;
-  curr_start.y -= (base_thick / 2) + line_marg;
-  curr_end.y += grid_size.y + (base_thick / 2) + line_marg;
-
-  for (int i = 0; i <= cell_num.y; i++) {
-    drawSubLine2D(curr_start, curr_end, line_marg, base_thick, colour);
-
-    curr_start.x += spacing.x;
-    curr_end.x += spacing.x;
-  }*/
 }

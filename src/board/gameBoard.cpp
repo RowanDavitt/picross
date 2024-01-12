@@ -65,3 +65,56 @@ bool gameBoard::checkWin() {
   }
   return win;
 }
+
+void gameBoard::boardFrame() {
+
+  if (IsWindowResized()) {
+    calculateGameBoard();
+    recalculateElements();
+  }
+
+  if (checkWin()) {
+    DrawText("win", 10, 100, 20, RAYWHITE);
+  }
+}
+
+bool gameBoard::inArea(Vector2 loc) {
+  return grid.inGrid(loc);
+}
+
+int gameBoard::pressInputDown(int button, Vector2 mouse_pos, int global_hold) {
+  if (!grid.inGrid(mouse_pos)) {
+    return 0;
+  }
+  Vector2 curr_coord = grid.getCellGridPos(mouse_pos);
+  cell2D curr_cell = grid.cells[curr_coord.y][curr_coord.x];
+  if (global_hold != -1 && board_hold == -1) {
+    return 0;
+  }
+  if (board_hold == -1) {
+    clear_mode = (curr_cell.painted == ElemCC::inputButtonColor[button]);
+    start_cell_coord = curr_coord;
+    board_hold = button;
+  }
+
+  grid.unhighlight();
+  Vector2 delta_coord = keepMaxMag(subVec(curr_coord, start_cell_coord));
+  Vector2 increment = signVec(delta_coord);
+  Vector2 cap = addVec(addVec(start_cell_coord, delta_coord), increment);
+  Vector2 curr = start_cell_coord;
+
+  do {
+    grid.cells[curr.y][curr.x].highlight = true;
+    curr = addVec(curr, increment);
+  } while ((!vecEquals(curr, cap)));
+
+  return board_hold;
+}
+
+void gameBoard::pressInputUp(int button) {
+  if (board_hold == button) {
+    grid.paintHighlighted(clear_mode, ElemCC::inputButtonColor[board_hold]);
+    board_hold = -1;
+    grid.unhighlight();
+  }
+}
