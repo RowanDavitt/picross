@@ -30,7 +30,7 @@ public:
   void drawGrid2D();
   bool inGrid(Vector2 screen_pos);
   void unhighlight();
-  void calculateGridSize(Vector2 loc, Vector2 grid_size);
+  void calculateGridSize(Vector2 loc, Vector2 grid_size, Vector2 num_cells);
   void recalculateCellSize();
   void paintHighlighted(bool clear_mode, ElemCC::ColorVal painting_colour);
 };

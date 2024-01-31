@@ -24,12 +24,11 @@ public:
 
   labelSet(Vector2 loc, Vector2 spacing, Vector2 num_cells, int label_height, float l_thick, std::vector<std::vector<bool>> *input_puzzle);
   labelSet() {}
-  void calculateSize(Vector2 loc, Vector2 l_spacing, int label_height, float l_thick);
+  void calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick);
   void makeLabelX(int col);
   void makeLabelY(int row);
   void drawYLabel();
   void drawXLabel();
-  void DrawSuperText(const char *text, Vector2 loc, int offset, Vector2 char_size, ElemCC::ColorVal text_colour);
   static Vector2 getMaxSizeLabel(std::vector<std::vector<bool>> *puzzle);
 };
 #endif

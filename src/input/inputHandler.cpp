@@ -10,6 +10,10 @@ inputHandler::inputHandler(inputArea *region) {
   regions.push_back(region);
 }
 
+void inputHandler::addRegion(inputArea *region) {
+  regions.push_back(region);
+}
+
 void inputHandler::inputDownRegions(int button, Vector2 loc) {
   for (inputArea *IA : regions) {
     if ((*IA).inArea(loc)) {

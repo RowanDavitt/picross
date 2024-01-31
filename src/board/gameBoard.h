@@ -24,8 +24,8 @@ public:
   const static int GRID_MARGIN_RATIO = 5;           // ratio to calculate distance from edge of screen to grid
   int label_height;
   int grid_margin;
+  std::vector<std::vector<bool>> *puzzle;
 
-  std::vector<std::vector<bool>> puzzle;
   gameBoard(std::vector<std::vector<bool>> *input_puzzle);
   gameBoard() {}
   void calculateGameBoard();

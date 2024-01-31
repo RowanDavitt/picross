@@ -3,7 +3,7 @@
 
 // The board the game is played from a usisng a 2D vector decribing the winning state
 gameBoard::gameBoard(std::vector<std::vector<bool>> *input_puzzle) {
-  puzzle = *input_puzzle;
+  puzzle = input_puzzle;
   calculateGameBoard();
 
   grid = grid2D(origin, board_size, num_cells);
@@ -13,10 +13,10 @@ gameBoard::gameBoard(std::vector<std::vector<bool>> *input_puzzle) {
 // Recalculate the position and dimesnsions of the baords contents, adjust for a change to the board
 // Intended for when the window is resized
 void gameBoard::recalculateElements() {
-  grid.calculateGridSize(origin, board_size);
+  grid.calculateGridSize(origin, board_size, num_cells);
   grid.recalculateCellSize();
 
-  labels.calculateSize(origin, grid.spacing, label_height, grid.line_thickness);
+  labels.calculateSize(origin, grid.spacing, num_cells, label_height, grid.line_thickness);
 }
 
 // calculate the position and dimensions and location of the board
@@ -30,8 +30,11 @@ void gameBoard::calculateGameBoard() {
 
   board_size = {(GetScreenWidth() - (2 * origin.x)), (GetScreenHeight() - (2 * origin.y))};
   origin = addVec(origin, label_height / 2);
-
-  num_cells = {(float)(puzzle)[0].size(), (float)(puzzle).size()};
+  if (puzzle->empty()) {
+    num_cells = {0, 0};
+  } else {
+    num_cells = {(float)(*puzzle)[0].size(), (float)(*puzzle).size()};
+  }
 }
 
 // Draw the board and all it's contents (includes labels)
@@ -60,7 +63,7 @@ bool gameBoard::checkWin() {
   bool win = true;
   for (unsigned int y = 0; y < b_state.size(); y++) {
     for (unsigned int x = 0; x < b_state[y].size(); x++) {
-      win = win && (b_state[y][x] == puzzle[y][x]);
+      win = win && (b_state[y][x] == (*puzzle)[y][x]);
     }
   }
   return win;
@@ -76,6 +79,7 @@ void gameBoard::boardFrame() {
   if (checkWin()) {
     DrawText("win", 10, 100, 20, RAYWHITE);
   }
+  drawGameBoard();
 }
 
 bool gameBoard::inArea(Vector2 loc) {
@@ -83,7 +87,7 @@ bool gameBoard::inArea(Vector2 loc) {
 }
 
 int gameBoard::pressInputDown(int button, Vector2 mouse_pos, int global_hold) {
-  if (!grid.inGrid(mouse_pos)) {
+  if (!grid.inGrid(mouse_pos) || grid.cells.empty()) {
     return 0;
   }
   Vector2 curr_coord = grid.getCellGridPos(mouse_pos);

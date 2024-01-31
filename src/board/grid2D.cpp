@@ -6,24 +6,13 @@
 // Current implementation takes into account the size of the labels
 grid2D::grid2D(Vector2 loc, Vector2 board_size, Vector2 num_cells) {
   cell_num = num_cells;
-  calculateGridSize(loc, board_size);
-
-  Vector2 curr = origin;
-  for (int i = 0; i < cell_num.y; i++) {
-    cells.push_back(std::vector<cell2D>());
-    for (int j = 0; j < cell_num.y; j++) {
-
-      cells[i].push_back(cell2D(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness)));
-      curr.x += spacing.x;
-    }
-    curr.y += spacing.y;
-    curr.x = origin.x;
-  }
+  calculateGridSize(loc, board_size, num_cells);
 }
 
 // Calculate the dimensions and location of the grid
 // Intended for when grid is initiazed or re-sized
-void grid2D::calculateGridSize(Vector2 loc, Vector2 board_size) {
+void grid2D::calculateGridSize(Vector2 loc, Vector2 board_size, Vector2 num_cells) {
+  cell_num = num_cells;
   spacing = divVec(board_size, cell_num);
 
   base_thick = minVec(spacing) / THICK_RATIO;
@@ -31,6 +20,23 @@ void grid2D::calculateGridSize(Vector2 loc, Vector2 board_size) {
   line_thickness = (base_thick + 2 * line_marg);
   origin = loc;
   grid_size = board_size;
+
+  Vector2 curr = origin;
+  for (int i = 0; i < cell_num.y; i++) {
+    if (i >= cells.size()) {
+      cells.push_back(std::vector<cell2D>());
+    }
+    for (int j = 0; j < cell_num.y; j++) {
+      if (j >= cells[i].size()) {
+        cells[i].push_back(cell2D(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness)));
+      } else {
+        cells[i][j] = cell2D(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness));
+      }
+      curr.x += spacing.x;
+    }
+    curr.y += spacing.y;
+    curr.x = origin.x;
+  }
 }
 
 // adjusts the size of cells, intended for when grid size or location is adjusted
@@ -38,7 +44,7 @@ void grid2D::recalculateCellSize() {
   float line_thickness = (base_thick + 2 * line_marg);
   Vector2 curr = origin;
   for (int i = 0; i < cell_num.y; i++) {
-    for (int j = 0; j < cell_num.y; j++) {
+    for (int j = 0; j < cell_num.x; j++) {
       cells[i][j].calculateSize(addVec(curr, line_thickness / 2),
                                 addVec(spacing, -line_thickness));
       curr.x += spacing.x;

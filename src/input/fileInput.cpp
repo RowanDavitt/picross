@@ -2,19 +2,19 @@
 #include "dirent.h"
 #include <fstream>
 
-std::string inDir = "puzzles/";
-std::string puzzleExt = ".pzl";
+std::string inputDirect1 = "puzzles/";
+std::string puzzleExt1 = ".pzl";
 
 int listfilenames(std::string inputDir, std::vector<std::string> *outList, std::string extension) {
   struct dirent *ent;
   DIR *dir = opendir(inputDir.c_str());
   if (dir != NULL) {
-    ent = readdir(dir);
-    while (ent != NULL) {
-      if (checkExt(std::string(ent->d_name), extension)) {
-        outList->push_back(std::string(ent->d_name));
+
+    while ((ent = readdir(dir)) != NULL) {
+      std::string fileName = std::string(ent->d_name);
+      if (checkExt(fileName, extension)) {
+        (*outList).push_back(fileName);
       }
-      ent = readdir(dir);
     }
     closedir(dir);
     return EXIT_SUCCESS;
@@ -23,15 +23,14 @@ int listfilenames(std::string inputDir, std::vector<std::string> *outList, std::
   }
 }
 
-std::string listPzLnames() {
-  std::vector<std::string> list;
-  if (listfilenames(inDir, &list, puzzleExt)) {
+std::string listPzLnames(std::vector<std::string> *outList) {
+  if (listfilenames(inputDirect1, outList, puzzleExt1)) {
     return "err";
   }
-  if (!list.size()) {
+  if (!(*outList).size()) {
     return "no";
   }
-  return list[0];
+  return (*outList)[0];
 }
 
 bool checkExt(std::string file, std::string extension) {
@@ -45,6 +44,19 @@ bool checkExt(std::string file, std::string extension) {
     }
   }
   return true;
+}
+
+std::string removeExt(std::string file, std::string extension) {
+  int end = file.size() - extension.size();
+  if (end < 0) {
+    return file;
+  }
+  return file.substr(0, end);
+}
+
+std::string removeplzExt(std::string file) {
+
+  return removeExt(file, puzzleExt1);
 }
 
 int readPuzzleFile(std::string filePath, std::vector<std::vector<bool>> *outPuzzle) {

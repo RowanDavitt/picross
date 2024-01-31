@@ -26,6 +26,7 @@
 #include "helper/helper.h"
 #include "input/fileInput.h"
 #include "input/inputHandler.h"
+#include "loadPage/loadingPage.h"
 #include "raylib.h"
 #include <iostream>
 #include <string>
@@ -42,6 +43,8 @@ Camera2D camera = {0};
 float margin;
 gameBoard board;
 inputHandler inputter;
+puzzleLoader plzload;
+bool set = false;
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -53,8 +56,8 @@ static void UpdateDrawFrame(void); // Update and draw one frame
 //----------------------------------------------------------------------------------
 int main() {
   std::vector<std::vector<bool>> input_puzzle;
-  readPuzzleFile("puzzles/testing2.pzl", &input_puzzle);
-  // Initialization
+  // readPuzzleFile("puzzles/testing2.pzl", &input_puzzle);
+  //  Initialization
   //--------------------------------------------------------------------------------------
   const int screenWidth = 1080;
   const int screenHeight = 720;
@@ -68,6 +71,8 @@ int main() {
 
   board = gameBoard(&input_puzzle);
   inputter = inputHandler(&board);
+  plzload = puzzleLoader(&input_puzzle);
+  inputter.addRegion(&plzload);
 
   //--------------------------------------------------------------------------------------
 
@@ -108,16 +113,24 @@ static void UpdateDrawFrame(void) {
   BeginMode2D(camera);
   //(*(board.getCell(GetMousePosition()))).painted = true;
   inputter.checkClick();
-  board.boardFrame();
+  if (plzload.done) {
+    if (!set) {
+      int temp2 = board.puzzle->size();
+      board.calculateGameBoard();
+      board.recalculateElements();
+      set = true;
+    }
+    board.boardFrame();
+  } else {
+    plzload.LoadPageFrame();
+  }
 
   // if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) || IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) clear_paint = cell2D::EMPTY;
-
-  board.drawGameBoard();
 
   EndMode2D();
 
   DrawFPS(10, 10);
-  DrawText(listPzLnames().c_str(), 10, 100, 30, WHITE);
+  // DrawText(listPzLnames().c_str(), 10, 100, 30, WHITE);
 
   EndDrawing();
   //----------------------------------------------------------------------------------

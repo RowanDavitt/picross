@@ -48,3 +48,19 @@ void drawOutlineGridLines2D(Vector2 origin, Vector2 grid_size, Vector2 cell_num,
   drawGridLines2D(origin, grid_size, cell_num, spacing, thickness, ElemCC::COLOUR_LOOKUP[col]);
   drawGridLines2D(origin, grid_size, cell_num, spacing, thickness - (2 * margin), ElemCC::SUB_LOOKUP[col]);
 }
+
+void DrawSuperText(const char *text, Vector2 loc, int offset, int char_height, int outlineThickness, ElemCC::ColorVal text_colour) {
+  loc.x += offset;
+  for (int i = -outlineThickness; i <= outlineThickness; i++)
+    for (int j = -outlineThickness; j <= outlineThickness; j++) {
+      DrawText(text, loc.x + i, loc.y + j, char_height, ElemCC::COLOUR_LOOKUP[text_colour]);
+    }
+
+  DrawText(text, loc.x, loc.y, char_height, ElemCC::SUB_LOOKUP[text_colour]);
+}
+
+void drawOutLineBox(Vector2 location, Vector2 dimensions, float border_thickness, ElemCC::ColorVal col) {
+  Rectangle rect{location.x + (border_thickness / 2), location.y + (border_thickness / 2), dimensions.x - border_thickness, dimensions.y - border_thickness};
+  DrawRectangleV(addVec(location, border_thickness), addVec(dimensions, -(2 * border_thickness)), ElemCC::SUB_LOOKUP[col]);
+  DrawRectangleLinesEx(rect, border_thickness, ElemCC::COLOUR_LOOKUP[col]);
+}

@@ -1,29 +1,39 @@
 #include "labelSet.h"
 #include "helper/helper.h"
+#include "helper/outlinedDraw.h"
 #include <string>
 
 labelSet::labelSet(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick, std::vector<std::vector<bool>> *input_puzzle) {
   cell_num = num_cells;
   puzzle = input_puzzle;
-
-  max_size.y = 0;
-  for (int i = 0; i < (int)(*puzzle).size(); i++) {
-    y_labels.push_back(std::vector<int>());
-    x_labels.push_back(std::vector<int>());
-  }
-  for (int i = 0; i < (int)(*puzzle).size(); i++) {
-    makeLabelY(i);
-    if (y_labels[i].size() > max_size.y) max_size.y = y_labels[i].size();
-  }
-  max_size.x = 0;
-  for (int i = 0; i < (int)puzzle[0].size(); i++) {
-    makeLabelX(i);
-    if (x_labels[i].size() > max_size.x) max_size.x = x_labels[i].size();
-  }
-  calculateSize(loc, l_spacing, label_height, l_thick);
+  calculateSize(loc, l_spacing, num_cells, label_height, l_thick);
 }
 
-void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, int label_height, float l_thick) {
+void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick) {
+  max_size.y = 0;
+  max_size.x = 0;
+  if (!(*puzzle).empty()) {
+
+    for (int i = 0; i < (int)(*puzzle)[0].size(); i++) {
+      if (i >= y_labels.size()) {
+        y_labels.push_back(std::vector<int>());
+      }
+    }
+    for (int i = 0; i < (int)(*puzzle).size(); i++) {
+      if (i >= x_labels.size()) {
+        x_labels.push_back(std::vector<int>());
+      }
+    }
+    for (int i = 0; i < (int)(*puzzle).size(); i++) {
+      makeLabelY(i);
+      if (y_labels[i].size() > max_size.y) max_size.y = y_labels[i].size();
+    }
+    for (int i = 0; i < (int)puzzle[0].size(); i++) {
+      makeLabelX(i);
+      if (x_labels[i].size() > max_size.x) max_size.x = x_labels[i].size();
+    }
+  }
+  cell_num = num_cells;
   line_thick = l_thick;
   spacing = l_spacing;
   off = addVec(loc, -line_thick / 2);
@@ -76,7 +86,7 @@ void labelSet::drawYLabel() {
       std::string text = std::to_string(row[i]);
       int c_offset = MeasureText(text.c_str(), char_size.y);
       curr.x -= char_size.x;
-      DrawSuperText(text.c_str(), curr, -c_offset / 2, char_size, text_colour);
+      DrawSuperText(text.c_str(), curr, -c_offset / 2, char_size.y, char_outline, text_colour);
       curr.x -= STACK_SPACING;
     }
     curr.x = off.x;
@@ -94,23 +104,12 @@ void labelSet::drawXLabel() {
       std::string text = std::to_string(col[i]);
       int c_offset = MeasureText(text.c_str(), char_size.y);
       curr.y -= char_size.y;
-      DrawSuperText(text.c_str(), curr, c_offset / 2, char_size, text_colour);
+      DrawSuperText(text.c_str(), curr, c_offset / 2, char_size.y, char_outline, text_colour);
       curr.y -= STACK_SPACING;
     }
     curr.y = off.y - 0.5 * char_size.y;
     curr.x += spacing.x;
   }
-}
-
-// outlines text
-void labelSet::DrawSuperText(const char *text, Vector2 loc, int offset, Vector2 char_size, ElemCC::ColorVal text_colour) {
-  loc.x += offset;
-  for (int i = -char_outline; i <= char_outline; i++)
-    for (int j = -char_outline; j <= char_outline; j++) {
-      DrawText(text, loc.x + i, loc.y + j, char_size.y, ElemCC::COLOUR_LOOKUP[text_colour]);
-    }
-
-  DrawText(text, loc.x, loc.y, char_size.y, ElemCC::SUB_LOOKUP[text_colour]);
 }
 
 Vector2 labelSet::getMaxSizeLabel(std::vector<std::vector<bool>> *puzzle) {
