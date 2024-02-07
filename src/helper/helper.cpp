@@ -75,6 +75,24 @@ Vector2 keepMaxMag(Vector2 v1) {
   return v1;
 }
 
+Vector2 doubleMaxMag(Vector2 v1) {
+  if (myAbs(v1.y) > myAbs(v1.x)) {
+    v1.x = v1.y;
+  } else {
+    v1.y = v1.x;
+  }
+  return v1;
+}
+
+Vector2 doubleMinMag(Vector2 v1) {
+  if (myAbs(v1.y) < myAbs(v1.x)) {
+    v1.x = v1.y;
+  } else {
+    v1.y = v1.x;
+  }
+  return v1;
+}
+
 Vector2 divVec(Vector2 v1, Vector2 v2) {
   return Vector2{v1.x / v2.x, v1.y / v2.y};
 }

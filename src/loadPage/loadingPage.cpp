@@ -4,7 +4,6 @@
 
 puzzleLoader::puzzleLoader(std::vector<std::vector<bool>> *puzzleDest) {
   fileList = std::vector<std::string>();
-  fileButtonList = std::vector<fileButton>();
   puzzle = puzzleDest;
   listPzLnames(&fileList);
   makeOptionList();
@@ -16,8 +15,11 @@ void puzzleLoader::makeOptionList() {
   float text_X_loc = GetScreenWidth() / 3;
   Vector2 pos = {text_X_loc, 2 * text_Y_increment};
   Vector2 size = {text_X_loc, text_Y_increment};
-  for (std::string lfile : fileList) {
-    fileButtonList.emplace_back(pos, size, lfile);
+  buttonListSize = fileList.size();
+
+  for (size_t i = 0; i < buttonListSize; i++) {
+    fileButtonList.emplace_back(pos, size, fileList[i]);
+    inputter.addRegion(&(fileButtonList.back()));
     pos.y += text_Y_increment;
   }
 }
@@ -26,6 +28,7 @@ int puzzleLoader::LoadPageFrame() {
   if (IsWindowResized()) {
     resize();
   }
+  // DrawText((std::to_string(temp)).c_str(), 10, 80, 20, WHITE);
 
   drawTitle();
   drawList();
@@ -34,15 +37,20 @@ int puzzleLoader::LoadPageFrame() {
 }
 
 void puzzleLoader::drawList() {
-  for (size_t i = 0; i < fileButtonList.size(); i++) {
-    fileButtonList[i].draw();
+  // for (size_t i = 0; i < buttonListSize; i++) {
+  //   fileButtonList[i].draw();
+  // }
+  for (std::list<fileButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
+    BlistIter->draw();
   }
 }
 
 void puzzleLoader::checkInputs() {
-  for (size_t i = 0; i < fileButtonList.size(); i++) {
-    if (fileButtonList[i].done) {
-      readPuzzleFile(prefix + fileButtonList[i].fileName, puzzle);
+
+  inputter.checkClick();
+  for (std::list<fileButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
+    if (BlistIter->done) {
+      readPuzzleFile(prefix + BlistIter->fileName, puzzle);
       done = 1;
       return;
     }
@@ -54,8 +62,9 @@ void puzzleLoader::resize() {
   float text_X_loc = GetScreenWidth() / 3;
   Vector2 pos = {text_X_loc, 2 * text_Y_increment};
   Vector2 size = {text_X_loc, text_Y_increment};
-  for (size_t i = 0; i < fileButtonList.size(); i++) {
-    fileButtonList[i].resize(pos, size);
+
+  for (std::list<fileButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
+    BlistIter->resize(pos, size);
     pos.y += text_Y_increment;
   }
 }
@@ -66,20 +75,3 @@ void puzzleLoader::drawTitle() {
   Vector2 textLoc = {text_X_loc, text_Y_loc_increment};
   DrawSuperText(selectTitle.c_str(), textLoc, 0, text_height, 3, ElemCC::LABEL_TEXT);
 }
-
-bool puzzleLoader::inArea(Vector2 location) {
-  for (size_t i = 0; i < fileButtonList.size(); i++) {
-    if (fileButtonList[i].inArea(location)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-int puzzleLoader::pressInputDown(int button, Vector2 mouse_pos, int global_hold) {
-  for (size_t i = 0; i < fileButtonList.size(); i++) {
-    fileButtonList[i].pressInputDown(button, mouse_pos);
-  }
-  return -1;
-}
-void puzzleLoader::pressInputUp(int button) {}

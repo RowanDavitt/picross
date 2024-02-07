@@ -6,52 +6,61 @@ gameBoard::gameBoard(std::vector<std::vector<bool>> *input_puzzle) {
   puzzle = input_puzzle;
   calculateGameBoard();
 
-  grid = grid2D(origin, board_size, num_cells);
-  labels = labelSet(origin, grid.spacing, num_cells, label_height, grid.line_thickness, input_puzzle);
+  grid = new grid2D(origin, spacing, board_size, num_cells);
+  labels = labelSet(origin, spacing, num_cells, label_height, grid->line_thickness, input_puzzle);
+  inputter.addRegion(grid);
 }
 
 // Recalculate the position and dimesnsions of the baords contents, adjust for a change to the board
 // Intended for when the window is resized
 void gameBoard::recalculateElements() {
-  grid.calculateGridSize(origin, board_size, num_cells);
-  grid.recalculateCellSize();
+  calculateGameBoard();
+  grid->calculateGridSize(origin, spacing, board_size, num_cells);
+  grid->recalculateCellSize();
 
-  labels.calculateSize(origin, grid.spacing, num_cells, label_height, grid.line_thickness);
+  labels.calculateSize(origin, spacing, num_cells, label_height, grid->line_thickness);
 }
 
 // calculate the position and dimensions and location of the board
 // Intended for when the board is initialized or the window is resized
 void gameBoard::calculateGameBoard() {
-  grid_margin = min(GetScreenHeight(), GetScreenWidth()) / GRID_MARGIN_RATIO;
-  label_height = grid_margin / LABEL_HEIGHT_RATIO;
   float grid_base = min(GetScreenWidth(), GetScreenHeight());
+  grid_margin = grid_base / GRID_MARGIN_RATIO;
+  label_height = grid_base / LABEL_HEIGHT_RATIO;
 
-  origin = {((GetScreenWidth() - grid_base) / 2 + grid_margin), ((GetScreenHeight() - grid_base) / 2 + grid_margin)};
-
-  board_size = {(GetScreenWidth() - (2 * origin.x)), (GetScreenHeight() - (2 * origin.y))};
-  origin = addVec(origin, label_height / 2);
   if (puzzle->empty()) {
     num_cells = {0, 0};
   } else {
     num_cells = {(float)(*puzzle)[0].size(), (float)(*puzzle).size()};
   }
+
+  origin = {(((GetScreenWidth() - grid_base) / 2) + grid_margin + label_height),
+            (((GetScreenHeight() - grid_base) / 2) + grid_margin + label_height)};
+
+  board_size = {(float)(GetScreenWidth() - ((2 * grid_margin) + label_height)),
+                (float)(GetScreenHeight() - ((2 * grid_margin) + label_height))};
+
+  spacing = doubleMinMag(divVec(board_size, num_cells));
+  board_size = scaleVec(num_cells, spacing);
+  origin = {(((GetScreenWidth() - board_size.x) + label_height) / 2),
+            (((GetScreenHeight() - board_size.y) + label_height) / 2)};
 }
 
 // Draw the board and all it's contents (includes labels)
 void gameBoard::drawGameBoard() {
   labels.drawXLabel();
   labels.drawYLabel();
-  grid.drawGrid2D();
+  grid->drawGrid2D();
 }
 
 // create a 2d boolean vector desribing the state of the current board
 std::vector<std::vector<bool>> gameBoard::getBoardState() {
   std::vector<std::vector<bool>> b_state;
-  for (unsigned int y = 0; y < grid.cells.size(); y++) {
+  for (unsigned int y = 0; y < grid->cells.size(); y++) {
     b_state.push_back(std::vector<bool>());
 
-    for (unsigned int x = 0; x < grid.cells[y].size(); x++) {
-      b_state[y].push_back(grid.cells[y][x].painted == ElemCC::ColorVal::CELL_FILL);
+    for (unsigned int x = 0; x < grid->cells[y].size(); x++) {
+      b_state[y].push_back(grid->cells[y][x].painted == ElemCC::ColorVal::CELL_FILL);
     }
   }
   return b_state;
@@ -70,55 +79,13 @@ bool gameBoard::checkWin() {
 }
 
 void gameBoard::boardFrame() {
-
   if (IsWindowResized()) {
-    calculateGameBoard();
     recalculateElements();
   }
+  inputter.checkClick();
 
   if (checkWin()) {
     DrawText("win", 10, 100, 20, RAYWHITE);
   }
   drawGameBoard();
-}
-
-bool gameBoard::inArea(Vector2 loc) {
-  return grid.inGrid(loc);
-}
-
-int gameBoard::pressInputDown(int button, Vector2 mouse_pos, int global_hold) {
-  if (!grid.inGrid(mouse_pos) || grid.cells.empty()) {
-    return 0;
-  }
-  Vector2 curr_coord = grid.getCellGridPos(mouse_pos);
-  cell2D curr_cell = grid.cells[curr_coord.y][curr_coord.x];
-  if (global_hold != -1 && board_hold == -1) {
-    return 0;
-  }
-  if (board_hold == -1) {
-    clear_mode = (curr_cell.painted == ElemCC::inputButtonColor[button]);
-    start_cell_coord = curr_coord;
-    board_hold = button;
-  }
-
-  grid.unhighlight();
-  Vector2 delta_coord = keepMaxMag(subVec(curr_coord, start_cell_coord));
-  Vector2 increment = signVec(delta_coord);
-  Vector2 cap = addVec(addVec(start_cell_coord, delta_coord), increment);
-  Vector2 curr = start_cell_coord;
-
-  do {
-    grid.cells[curr.y][curr.x].highlight = true;
-    curr = addVec(curr, increment);
-  } while ((!vecEquals(curr, cap)));
-
-  return board_hold;
-}
-
-void gameBoard::pressInputUp(int button) {
-  if (board_hold == button) {
-    grid.paintHighlighted(clear_mode, ElemCC::inputButtonColor[board_hold]);
-    board_hold = -1;
-    grid.unhighlight();
-  }
 }

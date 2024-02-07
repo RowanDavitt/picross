@@ -1,8 +1,8 @@
 #ifndef INPUT_HANDLER
 #define INPUT_HANDLER
-#include "board/gameboard.h"
 #include "inputArea.h"
 #include "raylib.h"
+#include <vector>
 
 class inputHandler {
 private:
@@ -12,7 +12,7 @@ private:
   std::vector<std::vector<inputArea *>> releaseNotifyRegions = std::vector<std::vector<inputArea *>>(2, std::vector<inputArea *>());
 
 public:
-  inputHandler() {}
+  inputHandler();
   inputHandler(std::vector<inputArea *> in_regions);
   inputHandler(inputArea *region);
   void checkClick();

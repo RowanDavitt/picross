@@ -5,10 +5,11 @@
 #include "helper/helper.h"
 #include "helper/outlinedDraw.h"
 #include "input/inputArea.h"
+#include "input/inputHandler.h"
 
 #include <string>
 #include <vector>
-class fileButton {
+class fileButton : public inputArea {
   int BUTTON_MARGIN_RATIO = 5;
   Vector2 position;
   Vector2 size;
@@ -20,11 +21,12 @@ public:
   std::string fileName;
   int done = 0;
   fileButton(Vector2 location, Vector2 dimensions, std::string displayText);
+  void resize(Vector2 location, Vector2 dimensions);
+  void draw();
 
   bool inArea(Vector2 location);
-  void resize(Vector2 location, Vector2 dimensions);
-  int pressInputDown(int button, Vector2 mouse_pos);
-  void draw();
+  int pressInputDown(int button, Vector2 mouse_pos, int global_hold);
+  void pressInputUp(int button) {}
 };
 
 #endif

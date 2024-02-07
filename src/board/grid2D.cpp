@@ -4,38 +4,42 @@
 
 // A grid made up of a collection if cells
 // Current implementation takes into account the size of the labels
-grid2D::grid2D(Vector2 loc, Vector2 board_size, Vector2 num_cells) {
+grid2D::grid2D(Vector2 loc, Vector2 space, Vector2 board_size, Vector2 num_cells) {
   cell_num = num_cells;
-  calculateGridSize(loc, board_size, num_cells);
+  calculateGridSize(loc, space, board_size, num_cells);
 }
 
 // Calculate the dimensions and location of the grid
 // Intended for when grid is initiazed or re-sized
-void grid2D::calculateGridSize(Vector2 loc, Vector2 board_size, Vector2 num_cells) {
-  cell_num = num_cells;
-  spacing = divVec(board_size, cell_num);
+void grid2D::calculateGridSize(Vector2 loc, Vector2 space, Vector2 board_size, Vector2 num_cells) {
+
+  cell_num.x = num_cells.x;
+  cell_num.y = num_cells.y;
+  spacing = space;
+  grid_size = scaleVec(cell_num, spacing);
 
   base_thick = minVec(spacing) / THICK_RATIO;
   line_marg = base_thick / LINE_MARG_RATIO;
   line_thickness = (base_thick + 2 * line_marg);
   origin = loc;
-  grid_size = board_size;
 
-  Vector2 curr = origin;
-  for (int i = 0; i < cell_num.y; i++) {
-    if (i >= cells.size()) {
-      cells.push_back(std::vector<cell2D>());
-    }
-    for (int j = 0; j < cell_num.y; j++) {
-      if (j >= cells[i].size()) {
-        cells[i].push_back(cell2D(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness)));
-      } else {
-        cells[i][j] = cell2D(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness));
+  if (cells.empty() || cells.size() != cell_num.y || cells[0].size() != cell_num.x) {
+    Vector2 curr = origin;
+    for (std::size_t i = 0; i < cell_num.y; i++) {
+      if (i >= cells.size()) {
+        cells.emplace_back();
       }
-      curr.x += spacing.x;
+      for (std::size_t j = 0; j < cell_num.x; j++) {
+        if (j >= cells[i].size()) {
+          cells[i].emplace_back(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness));
+        } else {
+          cells[i][j] = cell2D(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness));
+        }
+        curr.x += spacing.x;
+      }
+      curr.y += spacing.y;
+      curr.x = origin.x;
     }
-    curr.y += spacing.y;
-    curr.x = origin.x;
   }
 }
 
@@ -52,14 +56,6 @@ void grid2D::recalculateCellSize() {
     curr.y += spacing.y;
     curr.x = origin.x;
   }
-}
-
-// Checks if the mouse is on the grid
-bool grid2D::inGrid(Vector2 screen_pos) {
-  return (screen_pos.x >= origin.x) &&
-         (screen_pos.x < origin.x + grid_size.x) &&
-         (screen_pos.y >= origin.y) &&
-         (screen_pos.y < origin.y + grid_size.y);
 }
 
 // Gets the cell at the given screen location
@@ -84,53 +80,17 @@ void grid2D::unhighlight() {
     }
   }
 }
-
+#include <string>
 // Draws the grid
 void grid2D::drawGrid2D() {
-  for (std::vector<cell2D> row : cells) {
-    for (cell2D entry : row) {
-      entry.drawCell2D();
+  for (std::size_t i = 0; i < cells.size(); i++) {
+    for (std::size_t j = 0; j < cells[i].size(); j++) {
+      cells[i][j].drawCell2D();
     }
   }
 
   drawOutlineGridLines2D(origin, grid_size, cell_num, line_marg, line_thickness, colour);
 }
-
-/*Vector2 curr_start = origin;
-Vector2 curr_end = origin;
-
-curr_start.y -= (base_thick / 2) + line_marg;
-curr_end.y += grid_size.y + (base_thick / 2) + line_marg;
-for (int i = 0; i <= cell_num.y; i++) {
-  DrawLineEx(curr_start, curr_end, line_thickness, ElemCC::COLOUR_LOOKUP[colour]);
-
-  curr_start.x += spacing.x;
-  curr_end.x += spacing.x;
-}
-
-curr_start = origin;
-curr_end = origin;
-curr_start.x -= (base_thick / 2) + line_marg;
-curr_end.x += grid_size.x + (base_thick / 2) + line_marg;
-
-for (int i = 0; i <= cell_num.x; i++) {
-  drawOutLineLine2D(curr_start, curr_end, line_marg, base_thick, colour);
-
-  curr_start.y += spacing.y;
-  curr_end.y += spacing.y;
-}
-
-curr_start = origin;
-curr_end = origin;
-curr_start.y -= (base_thick / 2) + line_marg;
-curr_end.y += grid_size.y + (base_thick / 2) + line_marg;
-
-for (int i = 0; i <= cell_num.y; i++) {
-  drawSubLine2D(curr_start, curr_end, line_marg, base_thick, colour);
-
-  curr_start.x += spacing.x;
-  curr_end.x += spacing.x;
-}*/
 
 void grid2D::paintHighlighted(bool clear_mode, ElemCC::ColorVal painting_colour) {
   for (unsigned int i = 0; i < cells.size(); i++) {
@@ -146,4 +106,49 @@ void grid2D::paintHighlighted(bool clear_mode, ElemCC::ColorVal painting_colour)
       }
     }
   }
+}
+
+int grid2D::pressInputDown(int button, Vector2 mouse_pos, int global_hold) {
+  if (!inArea(mouse_pos) || cells.empty()) {
+    return 0;
+  }
+  Vector2 curr_coord = getCellGridPos(mouse_pos);
+  cell2D curr_cell = cells[curr_coord.y][curr_coord.x];
+  if (global_hold != -1 && board_hold == -1) {
+    return 0;
+  }
+  if (board_hold == -1) {
+    clear_mode = (curr_cell.painted == ElemCC::inputButtonColor[button]);
+    start_cell_coord = curr_coord;
+    board_hold = button;
+  }
+
+  unhighlight();
+  Vector2 delta_coord = keepMaxMag(subVec(curr_coord, start_cell_coord));
+  Vector2 increment = signVec(delta_coord);
+  Vector2 cap = addVec(addVec(start_cell_coord, delta_coord), increment);
+  Vector2 curr = start_cell_coord;
+
+  do {
+    cells[curr.y][curr.x].highlight = true;
+    curr = addVec(curr, increment);
+  } while ((!vecEquals(curr, cap)));
+
+  return board_hold;
+}
+
+void grid2D::pressInputUp(int button) {
+  if (board_hold == button) {
+    paintHighlighted(clear_mode, ElemCC::inputButtonColor[board_hold]);
+    board_hold = -1;
+    unhighlight();
+  }
+}
+
+// Checks if the mouse is on the grid
+bool grid2D::inArea(Vector2 screen_pos) {
+  return (screen_pos.x >= origin.x) &&
+         (screen_pos.x < origin.x + grid_size.x) &&
+         (screen_pos.y >= origin.y) &&
+         (screen_pos.y < origin.y + grid_size.y);
 }

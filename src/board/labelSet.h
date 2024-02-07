@@ -1,5 +1,6 @@
 #include "helper/ColorConsts.h"
 #include "raylib.h"
+#include <string>
 #include <vector>
 
 #ifndef LABEL_SET
@@ -25,8 +26,8 @@ public:
   labelSet(Vector2 loc, Vector2 spacing, Vector2 num_cells, int label_height, float l_thick, std::vector<std::vector<bool>> *input_puzzle);
   labelSet() {}
   void calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick);
-  void makeLabelX(int col);
-  void makeLabelY(int row);
+  void makeLabelX(std::size_t col);
+  void makeLabelY(std::size_t row);
   void drawYLabel();
   void drawXLabel();
   static Vector2 getMaxSizeLabel(std::vector<std::vector<bool>> *puzzle);

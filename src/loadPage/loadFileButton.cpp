@@ -23,7 +23,7 @@ bool fileButton::inArea(Vector2 location) {
           location.x < (position.x + size.x) &&
           location.y < (position.y + size.y));
 }
-int fileButton::pressInputDown(int button, Vector2 mouse_pos) {
+int fileButton::pressInputDown(int button, Vector2 mouse_pos, int global_hold) {
   if (inArea(mouse_pos)) {
     if (button == MOUSE_BUTTON_LEFT) {
       done = 1;

@@ -42,7 +42,6 @@ Camera2D camera = {0};
 
 float margin;
 gameBoard board;
-inputHandler inputter;
 puzzleLoader plzload;
 bool set = false;
 
@@ -70,9 +69,7 @@ int main() {
   camera.target = Vector2{0, 0};
 
   board = gameBoard(&input_puzzle);
-  inputter = inputHandler(&board);
   plzload = puzzleLoader(&input_puzzle);
-  inputter.addRegion(&plzload);
 
   //--------------------------------------------------------------------------------------
 
@@ -111,11 +108,8 @@ static void UpdateDrawFrame(void) {
   ClearBackground(ElemCC::COLOUR_LOOKUP[ElemCC::ColorVal::BACKGROUND_FILL]);
 
   BeginMode2D(camera);
-  //(*(board.getCell(GetMousePosition()))).painted = true;
-  inputter.checkClick();
   if (plzload.done) {
     if (!set) {
-      int temp2 = board.puzzle->size();
       board.calculateGameBoard();
       board.recalculateElements();
       set = true;

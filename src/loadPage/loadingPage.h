@@ -3,13 +3,16 @@
 #define LOADPAGE
 #include "input/inputHandler.h"
 #include "loadFileButton.h"
+#include <list>
 #include <string>
 #include <vector>
-class puzzleLoader : public inputArea {
+class puzzleLoader {
   std::string selectTitle = "Select a File";
   std::vector<std::string> fileList;
-  std::vector<fileButton> fileButtonList;
+  std::list<fileButton> fileButtonList;
   std::string prefix = "puzzles/";
+  inputHandler inputter = inputHandler();
+  size_t buttonListSize = 0;
 
 public:
   int done = 0;
@@ -24,10 +27,6 @@ public:
   void resize();
   void drawList();
   void checkInputs();
-
-  bool inArea(Vector2 location);
-  int pressInputDown(int button, Vector2 mouse_pos, int global_hold);
-  void pressInputUp(int button);
 };
 
 #endif

@@ -15,6 +15,8 @@ Vector2 subVec(Vector2 v1, Vector2 v2);
 Vector2 scaleVec(Vector2 v1, int cons);
 Vector2 signVec(Vector2 v1);
 Vector2 keepMaxMag(Vector2 v1);
+Vector2 doubleMaxMag(Vector2 v1);
+Vector2 doubleMinMag(Vector2 v1);
 Vector2 divVec(Vector2 v1, Vector2 v2);
 Vector2 divVec(Vector2 v1, int cons);
 Vector2 scaleVec(Vector2 v1, Vector2 v2);

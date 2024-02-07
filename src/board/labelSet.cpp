@@ -1,7 +1,6 @@
 #include "labelSet.h"
 #include "helper/helper.h"
 #include "helper/outlinedDraw.h"
-#include <string>
 
 labelSet::labelSet(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick, std::vector<std::vector<bool>> *input_puzzle) {
   cell_num = num_cells;
@@ -14,21 +13,21 @@ void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, 
   max_size.x = 0;
   if (!(*puzzle).empty()) {
 
-    for (int i = 0; i < (int)(*puzzle)[0].size(); i++) {
+    for (size_t i = 0; i < (*puzzle).size(); i++) {
       if (i >= y_labels.size()) {
         y_labels.push_back(std::vector<int>());
       }
     }
-    for (int i = 0; i < (int)(*puzzle).size(); i++) {
+    for (size_t i = 0; i < (*puzzle)[0].size(); i++) {
       if (i >= x_labels.size()) {
         x_labels.push_back(std::vector<int>());
       }
     }
-    for (int i = 0; i < (int)(*puzzle).size(); i++) {
+    for (size_t i = 0; i < (*puzzle).size(); i++) {
       makeLabelY(i);
       if (y_labels[i].size() > max_size.y) max_size.y = y_labels[i].size();
     }
-    for (int i = 0; i < (int)puzzle[0].size(); i++) {
+    for (size_t i = 0; i < (*puzzle)[0].size(); i++) {
       makeLabelX(i);
       if (x_labels[i].size() > max_size.x) max_size.x = x_labels[i].size();
     }
@@ -46,8 +45,9 @@ void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, 
   char_outline = char_size.y / CHAR_OUTLINE_RATIO;
 }
 
-void labelSet::makeLabelX(int col) {
-  int runSum = 0;
+void labelSet::makeLabelX(size_t col) {
+  x_labels[col].clear();
+  size_t runSum = 0;
   for (std::vector<bool> row : (*puzzle)) {
     if (row[col]) {
       runSum++;
@@ -61,8 +61,9 @@ void labelSet::makeLabelX(int col) {
   if (runSum > 0 || x_labels[col].size() == 0) x_labels[col].push_back(runSum);
 }
 
-void labelSet::makeLabelY(int row) {
-  int runSum = 0;
+void labelSet::makeLabelY(size_t row) {
+  y_labels[row].clear();
+  size_t runSum = 0;
   for (bool entry : (*puzzle)[row]) {
     if (entry) {
       runSum++;
