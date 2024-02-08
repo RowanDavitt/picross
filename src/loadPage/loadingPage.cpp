@@ -12,13 +12,14 @@ puzzleLoader::puzzleLoader(std::vector<std::vector<bool>> *puzzleDest) {
 
 void puzzleLoader::makeOptionList() {
   float text_Y_increment = (GetScreenHeight() / (3 + fileList.size()));
-  float text_X_loc = GetScreenWidth() / 3;
+  float text_X_size = GetScreenWidth() * BUTTON_X_SIZE_RATIO;
+  float text_X_loc = (GetScreenWidth() - text_X_size) / 2;
   Vector2 pos = {text_X_loc, 2 * text_Y_increment};
-  Vector2 size = {text_X_loc, text_Y_increment};
+  Vector2 size = {text_X_size, text_Y_increment};
   buttonListSize = fileList.size();
 
   for (size_t i = 0; i < buttonListSize; i++) {
-    fileButtonList.emplace_back(pos, size, fileList[i]);
+    fileButtonList.emplace_back(pos, size, fileList[i], ElemCC::ColorVal::GRID_LINES);
     inputter.addRegion(&(fileButtonList.back()));
     pos.y += text_Y_increment;
   }
@@ -40,7 +41,7 @@ void puzzleLoader::drawList() {
   // for (size_t i = 0; i < buttonListSize; i++) {
   //   fileButtonList[i].draw();
   // }
-  for (std::list<fileButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
+  for (std::list<textButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
     BlistIter->draw();
   }
 }
@@ -48,7 +49,7 @@ void puzzleLoader::drawList() {
 void puzzleLoader::checkInputs() {
 
   inputter.checkClick();
-  for (std::list<fileButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
+  for (std::list<textButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
     if (BlistIter->done) {
       readPuzzleFile(prefix + BlistIter->fileName, puzzle);
       done = 1;
@@ -59,11 +60,12 @@ void puzzleLoader::checkInputs() {
 
 void puzzleLoader::resize() {
   float text_Y_increment = (GetScreenHeight() / (3 + fileList.size()));
-  float text_X_loc = GetScreenWidth() / 3;
+  float text_X_size = GetScreenWidth() * BUTTON_X_SIZE_RATIO;
+  float text_X_loc = (GetScreenWidth() - text_X_size) / 2;
   Vector2 pos = {text_X_loc, 2 * text_Y_increment};
-  Vector2 size = {text_X_loc, text_Y_increment};
+  Vector2 size = {text_X_size, text_Y_increment};
 
-  for (std::list<fileButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
+  for (std::list<textButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
     BlistIter->resize(pos, size);
     pos.y += text_Y_increment;
   }
@@ -71,7 +73,7 @@ void puzzleLoader::resize() {
 
 void puzzleLoader::drawTitle() {
   float text_Y_loc_increment = (GetScreenHeight() / (3 + fileList.size()));
-  float text_X_loc = ((GetScreenWidth() - MeasureText(selectTitle.c_str(), text_height)) / 2) + 3;
+  float text_X_loc = ((GetScreenWidth() - MeasureText(selectTitle.c_str(), text_Y_loc_increment / 2)) / 2) + 3;
   Vector2 textLoc = {text_X_loc, text_Y_loc_increment};
-  DrawSuperText(selectTitle.c_str(), textLoc, 0, text_height, 3, ElemCC::LABEL_TEXT);
+  DrawSuperText(selectTitle.c_str(), textLoc, 0, text_Y_loc_increment / 2, 3, ElemCC::LABEL_TEXT);
 }

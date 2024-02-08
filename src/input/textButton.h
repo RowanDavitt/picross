@@ -4,23 +4,24 @@
 #include "helper/ColorConsts.h"
 #include "helper/helper.h"
 #include "helper/outlinedDraw.h"
-#include "input/inputArea.h"
-#include "input/inputHandler.h"
+#include "inputArea.h"
+#include "inputHandler.h"
 
 #include <string>
 #include <vector>
-class fileButton : public inputArea {
+class textButton : public inputArea {
   int BUTTON_MARGIN_RATIO = 5;
   Vector2 position;
   Vector2 size;
   int text_height;
   float margin;
   Vector2 text_off;
+  ElemCC::ColorVal buttonColour;
 
 public:
   std::string fileName;
   int done = 0;
-  fileButton(Vector2 location, Vector2 dimensions, std::string displayText);
+  textButton(Vector2 location, Vector2 dimensions, std::string displayText, ElemCC::ColorVal b_colour);
   void resize(Vector2 location, Vector2 dimensions);
   void draw();
 

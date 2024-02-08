@@ -9,6 +9,7 @@
 class gameBoard {
 
 public:
+  const char *WIN_MESSAGE = "Win";
   Vector2 spacing;
   Vector2 origin;
   Vector2 grid_size;
@@ -32,6 +33,7 @@ public:
   std::vector<std::vector<bool>> getBoardState();
   bool checkWin();
   void boardFrame();
+  void displayWin();
 };
 
 #endif

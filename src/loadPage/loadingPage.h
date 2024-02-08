@@ -2,17 +2,18 @@
 #ifndef LOADPAGE
 #define LOADPAGE
 #include "input/inputHandler.h"
-#include "loadFileButton.h"
+#include "input/textButton.h"
 #include <list>
 #include <string>
 #include <vector>
 class puzzleLoader {
   std::string selectTitle = "Select a File";
   std::vector<std::string> fileList;
-  std::list<fileButton> fileButtonList;
+  std::list<textButton> fileButtonList;
   std::string prefix = "puzzles/";
   inputHandler inputter = inputHandler();
   size_t buttonListSize = 0;
+  float BUTTON_X_SIZE_RATIO = 0.5;
 
 public:
   int done = 0;

@@ -1,5 +1,6 @@
 #include "gameBoard.h"
 #include "helper/helper.h"
+#include "helper/outlinedDraw.h"
 
 // The board the game is played from a usisng a 2D vector decribing the winning state
 gameBoard::gameBoard(std::vector<std::vector<bool>> *input_puzzle) {
@@ -51,6 +52,25 @@ void gameBoard::drawGameBoard() {
   labels.drawXLabel();
   labels.drawYLabel();
   grid->drawGrid2D();
+  if (checkWin()) {
+    displayWin();
+  }
+}
+
+void gameBoard::displayWin() {
+  Vector2 size{((float)GetScreenWidth() * (float)0.4), ((float)GetScreenHeight() * (float)0.4)};
+  Vector2 pos{((float)GetScreenWidth() * (float)0.5), ((float)GetScreenHeight() * (float)0.5)};
+  Vector2 textPos = pos;
+  pos = subVec(pos, divVec(size, 2));
+  float thick = size.x / 20;
+  drawOutLineBox(pos, size, thick, ElemCC::ColorVal::WIN_BOX);
+  float textHeight = (size.y - (2 * thick)) / 2;
+  if (((size.x - (2 * thick)) / 2) < MeasureText(WIN_MESSAGE, textHeight)) {
+    textHeight = ((textHeight / MeasureText(WIN_MESSAGE, textHeight)) * (size.x - (2 * thick))) / 2;
+  }
+  textPos.x -= MeasureText(WIN_MESSAGE, textHeight) / 2;
+  textPos.y -= textHeight / 2;
+  DrawSuperText(WIN_MESSAGE, textPos, 0, textHeight, textHeight / 10, ElemCC::ColorVal::LABEL_TEXT);
 }
 
 // create a 2d boolean vector desribing the state of the current board
@@ -82,10 +102,8 @@ void gameBoard::boardFrame() {
   if (IsWindowResized()) {
     recalculateElements();
   }
-  inputter.checkClick();
-
-  if (checkWin()) {
-    DrawText("win", 10, 100, 20, RAYWHITE);
+  if (!checkWin()) {
+    inputter.checkClick();
   }
   drawGameBoard();
 }

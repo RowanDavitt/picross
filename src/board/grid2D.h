@@ -37,6 +37,7 @@ public:
   void calculateGridSize(Vector2 loc, Vector2 spacing, Vector2 grid_size, Vector2 num_cells);
   void recalculateCellSize();
   void paintHighlighted(bool clear_mode, ElemCC::ColorVal painting_colour);
+  void buildGrid();
 
   bool inArea(Vector2 location);
   int pressInputDown(int button, Vector2 mouse_pos, int global_hold);

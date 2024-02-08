@@ -11,9 +11,9 @@ labelSet::labelSet(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_
 void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick) {
   max_size.y = 0;
   max_size.x = 0;
-  if (!(*puzzle).empty()) {
+  if (!puzzle->empty()) {
 
-    for (size_t i = 0; i < (*puzzle).size(); i++) {
+    for (size_t i = 0; i < puzzle->size(); i++) {
       if (i >= y_labels.size()) {
         y_labels.push_back(std::vector<int>());
       }
@@ -23,7 +23,7 @@ void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, 
         x_labels.push_back(std::vector<int>());
       }
     }
-    for (size_t i = 0; i < (*puzzle).size(); i++) {
+    for (size_t i = 0; i < puzzle->size(); i++) {
       makeLabelY(i);
       if (y_labels[i].size() > max_size.y) max_size.y = y_labels[i].size();
     }
@@ -97,7 +97,7 @@ void labelSet::drawYLabel() {
 
 void labelSet::drawXLabel() {
   Vector2 curr = off;
-  curr.x += (spacing.x - char_size.x + line_thick) / 2;
+  curr.x += (spacing.x + line_thick) / 2;
   curr.y -= 0.5 * char_size.y;
 
   for (std::vector<int> col : x_labels) {
@@ -105,7 +105,7 @@ void labelSet::drawXLabel() {
       std::string text = std::to_string(col[i]);
       int c_offset = MeasureText(text.c_str(), char_size.y);
       curr.y -= char_size.y;
-      DrawSuperText(text.c_str(), curr, c_offset / 2, char_size.y, char_outline, text_colour);
+      DrawSuperText(text.c_str(), curr, -c_offset / 2, char_size.y, char_outline, text_colour);
       curr.y -= STACK_SPACING;
     }
     curr.y = off.y - 0.5 * char_size.y;
