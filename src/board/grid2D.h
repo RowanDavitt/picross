@@ -41,6 +41,6 @@ public:
 
   bool inArea(Vector2 location);
   int pressInputDown(int button, Vector2 mouse_pos, int global_hold);
-  void pressInputUp(int button);
+  void pressInputUp(int button, Vector2 mouse_pos);
 };
 #endif

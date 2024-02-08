@@ -12,4 +12,6 @@ int readPuzzleFile(std::string filePath, std::vector<std::vector<bool>> *outPuzz
 int writePuzzleFile(std::string filePath, std::vector<std::vector<bool>> *outPuzzle);
 std::string removeExt(std::string file, std::string extension);
 std::string removeplzExt(std::string file);
+static std::string inputDirect = "puzzles/";
+static std::string puzzleExt = ".pzl";
 #endif

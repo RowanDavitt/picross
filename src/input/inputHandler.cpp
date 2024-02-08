@@ -27,10 +27,11 @@ void inputHandler::inputDownRegions(int button, Vector2 loc) {
   }
 }
 
-void inputHandler::inputUpRegions(int button) {
+void inputHandler::inputUpRegions(int button, Vector2 loc) {
   for (inputArea *IA : releaseNotifyRegions[button]) {
-    IA->pressInputUp(button);
+    IA->pressInputUp(button, loc);
   }
+  releaseNotifyRegions[button].clear();
 }
 
 void inputHandler::checkClick() {
@@ -41,7 +42,7 @@ void inputHandler::checkClick() {
       global_hold = m_button;
 
     } else {
-      inputUpRegions(m_button);
+      inputUpRegions(m_button, loc);
       if (global_hold == m_button) {
         global_hold = -1;
       }

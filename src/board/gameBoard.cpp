@@ -60,17 +60,9 @@ void gameBoard::drawGameBoard() {
 void gameBoard::displayWin() {
   Vector2 size{((float)GetScreenWidth() * (float)0.4), ((float)GetScreenHeight() * (float)0.4)};
   Vector2 pos{((float)GetScreenWidth() * (float)0.5), ((float)GetScreenHeight() * (float)0.5)};
-  Vector2 textPos = pos;
+  float thick = size.x / 25;
   pos = subVec(pos, divVec(size, 2));
-  float thick = size.x / 20;
-  drawOutLineBox(pos, size, thick, ElemCC::ColorVal::WIN_BOX);
-  float textHeight = (size.y - (2 * thick)) / 2;
-  if (((size.x - (2 * thick)) / 2) < MeasureText(WIN_MESSAGE, textHeight)) {
-    textHeight = ((textHeight / MeasureText(WIN_MESSAGE, textHeight)) * (size.x - (2 * thick))) / 2;
-  }
-  textPos.x -= MeasureText(WIN_MESSAGE, textHeight) / 2;
-  textPos.y -= textHeight / 2;
-  DrawSuperText(WIN_MESSAGE, textPos, 0, textHeight, textHeight / 10, ElemCC::ColorVal::LABEL_TEXT);
+  drawBoxWithText(WIN_MESSAGE, size, pos, thick, thick, ElemCC::ColorVal::WIN_BOX, ElemCC::ColorVal::LABEL_TEXT);
 }
 
 // create a 2d boolean vector desribing the state of the current board

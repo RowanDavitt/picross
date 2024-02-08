@@ -10,4 +10,5 @@ void drawOutlineGridLines2D(Vector2 origin, Vector2 grid_size, Vector2 cell_num,
 
 void DrawSuperText(const char *text, Vector2 loc, int offset, int char_height, int outlineThickness, ElemCC::ColorVal text_colour);
 void drawOutLineBox(Vector2 location, Vector2 dimensions, float border_thickness, ElemCC::ColorVal col);
+void drawBoxWithText(const char *msg, Vector2 size, Vector2 pos, float box_border_thick, float text_border_thick, ElemCC::ColorVal box_col, ElemCC::ColorVal text_col);
 #endif

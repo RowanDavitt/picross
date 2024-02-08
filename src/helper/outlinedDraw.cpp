@@ -64,3 +64,24 @@ void drawOutLineBox(Vector2 location, Vector2 dimensions, float border_thickness
   DrawRectangleV(addVec(location, border_thickness), addVec(dimensions, -(2 * border_thickness)), ElemCC::SUB_LOOKUP[col]);
   DrawRectangleLinesEx(rect, border_thickness, ElemCC::COLOUR_LOOKUP[col]);
 }
+
+// pos is top left, text will be centered
+void drawBoxWithText(const char *msg,
+                     Vector2 size,
+                     Vector2 pos,
+                     float box_border_thick,
+                     float text_border_thick,
+                     ElemCC::ColorVal box_col,
+                     ElemCC::ColorVal text_col) {
+
+  Vector2 textPos = addVec(pos, divVec(size, 2));
+  ;
+  drawOutLineBox(pos, size, box_border_thick, box_col);
+  float textHeight = (size.y - (2 * box_border_thick)) / 2;
+  if (((size.x - (2 * box_border_thick)) / 2) < MeasureText(msg, textHeight)) {
+    textHeight = ((textHeight / MeasureText(msg, textHeight)) * (size.x - (2 * box_border_thick))) / 2;
+  }
+  textPos.x -= MeasureText(msg, textHeight) / 2;
+  textPos.y -= textHeight / 2;
+  DrawSuperText(msg, textPos, 0, textHeight, text_border_thick, text_col);
+}

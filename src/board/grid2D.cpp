@@ -1,6 +1,7 @@
 #include "grid2D.h"
 #include "helper/helper.h"
 #include "helper/outlinedDraw.h"
+#include <string>
 
 // A grid made up of a collection if cells
 // Current implementation takes into account the size of the labels
@@ -68,7 +69,7 @@ cell2D *grid2D::getCell(Vector2 screen_pos) {
   return &(cells[loc.y][loc.x]);
 }
 
-// Gets the top left corner of the grid at the at the given grid coordinate
+// Gets the index ofthe grid cell at the at the given grid coordinates
 Vector2 grid2D::getCellGridPos(Vector2 grid_pos) {
   Vector2 coords;
   coords.x = (int)((grid_pos.x - origin.x) / spacing.x);
@@ -78,17 +79,17 @@ Vector2 grid2D::getCellGridPos(Vector2 grid_pos) {
 
 // Removes hilghting from all cells
 void grid2D::unhighlight() {
-  for (unsigned int i = 0; i < cells.size(); i++) {
-    for (unsigned int j = 0; j < cells[i].size(); j++) {
+  for (size_t i = 0; i < cells.size(); i++) {
+    for (size_t j = 0; j < cells[i].size(); j++) {
       cells[i][j].highlight = false;
     }
   }
 }
-#include <string>
+
 // Draws the grid
 void grid2D::drawGrid2D() {
-  for (std::size_t i = 0; i < cells.size(); i++) {
-    for (std::size_t j = 0; j < cells[i].size(); j++) {
+  for (size_t i = 0; i < cells.size(); i++) {
+    for (size_t j = 0; j < cells[i].size(); j++) {
       cells[i][j].drawCell2D();
     }
   }
@@ -97,11 +98,12 @@ void grid2D::drawGrid2D() {
 }
 
 void grid2D::paintHighlighted(bool clear_mode, ElemCC::ColorVal painting_colour) {
-  for (unsigned int i = 0; i < cells.size(); i++) {
-    for (unsigned int j = 0; j < cells[i].size(); j++) {
+  for (size_t i = 0; i < cells.size(); i++) {
+    for (size_t j = 0; j < cells[i].size(); j++) {
       if (cells[i][j].highlight) {
         if (!clear_mode) {
           cells[i][j].painted = painting_colour;
+
         } else {
           if (cells[i][j].painted == painting_colour) {
             cells[i][j].painted = ElemCC::ColorVal::CELL_EMPTY;
@@ -141,7 +143,7 @@ int grid2D::pressInputDown(int button, Vector2 mouse_pos, int global_hold) {
   return board_hold;
 }
 
-void grid2D::pressInputUp(int button) {
+void grid2D::pressInputUp(int button, Vector2 mouse_pos) {
   if (board_hold == button) {
     paintHighlighted(clear_mode, ElemCC::inputButtonColor[board_hold]);
     board_hold = -1;

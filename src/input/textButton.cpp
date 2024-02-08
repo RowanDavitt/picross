@@ -25,15 +25,18 @@ bool textButton::inArea(Vector2 location) {
           location.y < (position.y + size.y));
 }
 int textButton::pressInputDown(int button, Vector2 mouse_pos, int global_hold) {
-  if (inArea(mouse_pos)) {
-    if (button == MOUSE_BUTTON_LEFT) {
-      done = 1;
-    }
+  if (global_hold == -1) {
+    return button;
   }
   return -1;
 }
 
+void textButton::pressInputUp(int button, Vector2 mouse_pos) {
+  if (button == MOUSE_BUTTON_LEFT && inArea(mouse_pos)) {
+    done = 1;
+  }
+}
+
 void textButton::draw() {
-  drawOutLineBox(position, size, 5, buttonColour);
-  DrawSuperText(removeplzExt(fileName).c_str(), addVec(position, text_off), 0, text_height, 3, ElemCC::LABEL_TEXT);
+  drawBoxWithText(removeplzExt(fileName).c_str(), size, position, 5, 3, buttonColour, ElemCC::LABEL_TEXT);
 }

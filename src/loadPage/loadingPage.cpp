@@ -51,7 +51,7 @@ void puzzleLoader::checkInputs() {
   inputter.checkClick();
   for (std::list<textButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
     if (BlistIter->done) {
-      readPuzzleFile(prefix + BlistIter->fileName, puzzle);
+      readPuzzleFile(inputDirect + BlistIter->fileName, puzzle);
       done = 1;
       return;
     }

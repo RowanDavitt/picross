@@ -17,7 +17,7 @@ public:
   inputHandler(inputArea *region);
   void checkClick();
   void inputDownRegions(int button, Vector2 loc);
-  void inputUpRegions(int button);
+  void inputUpRegions(int button, Vector2 loc);
   void addRegion(inputArea *region);
 };
 #endif

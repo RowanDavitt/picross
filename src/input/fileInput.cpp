@@ -2,9 +2,6 @@
 #include "dirent.h"
 #include <fstream>
 
-std::string inputDirect1 = "puzzles/";
-std::string puzzleExt1 = ".pzl";
-
 int listfilenames(std::string inputDir, std::vector<std::string> *outList, std::string extension) {
   struct dirent *ent;
   DIR *dir = opendir(inputDir.c_str());
@@ -24,7 +21,7 @@ int listfilenames(std::string inputDir, std::vector<std::string> *outList, std::
 }
 
 std::string listPzLnames(std::vector<std::string> *outList) {
-  if (listfilenames(inputDirect1, outList, puzzleExt1)) {
+  if (listfilenames(inputDirect, outList, puzzleExt)) {
     return "err";
   }
   if (!(*outList).size()) {
@@ -56,7 +53,7 @@ std::string removeExt(std::string file, std::string extension) {
 
 std::string removeplzExt(std::string file) {
 
-  return removeExt(file, puzzleExt1);
+  return removeExt(file, puzzleExt);
 }
 
 int readPuzzleFile(std::string filePath, std::vector<std::vector<bool>> *outPuzzle) {

@@ -10,7 +10,6 @@ class puzzleLoader {
   std::string selectTitle = "Select a File";
   std::vector<std::string> fileList;
   std::list<textButton> fileButtonList;
-  std::string prefix = "puzzles/";
   inputHandler inputter = inputHandler();
   size_t buttonListSize = 0;
   float BUTTON_X_SIZE_RATIO = 0.5;
