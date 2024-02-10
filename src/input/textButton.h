@@ -17,11 +17,12 @@ class textButton : public inputArea {
   float margin;
   Vector2 text_off;
   ElemCC::ColorVal buttonColour;
+  ElemCC::ColorVal textColour;
 
 public:
-  std::string fileName;
+  std::string buttonText;
   int done = 0;
-  textButton(Vector2 location, Vector2 dimensions, std::string displayText, ElemCC::ColorVal b_colour);
+  textButton(Vector2 location, Vector2 dimensions, std::string displayText, ElemCC::ColorVal b_colour, ElemCC::ColorVal t_colour);
   void resize(Vector2 location, Vector2 dimensions);
   void draw();
 

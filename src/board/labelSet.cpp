@@ -116,16 +116,16 @@ void labelSet::drawXLabel() {
 Vector2 labelSet::getMaxSizeLabel(std::vector<std::vector<bool>> *puzzle) {
   Vector2 curr_sum{0, 0};
   Vector2 curr_max{0, 0};
-  for (unsigned int y = 0; y < (*puzzle).size(); y++) {
+  for (size_t y = 0; y < (*puzzle).size(); y++) {
     curr_sum = {0, 0};
-    for (unsigned int x = 0; x < (*puzzle)[y].size(); x++) {
+    for (size_t x = 0; x < (*puzzle)[y].size(); x++) {
       if ((*puzzle)[y][x]) curr_sum.x++;
     }
     curr_max.x = max(curr_sum.x, curr_max.x);
   }
-  for (unsigned int x = 0; x < (*puzzle)[0].size(); x++) {
+  for (size_t x = 0; x < (*puzzle)[0].size(); x++) {
     curr_sum = {0, 0};
-    for (unsigned int y = 0; y < (*puzzle).size(); y++) {
+    for (size_t y = 0; y < (*puzzle).size(); y++) {
       if ((*puzzle)[y][x]) curr_sum.y++;
     }
     curr_max.y = max(curr_sum.y, curr_max.y);

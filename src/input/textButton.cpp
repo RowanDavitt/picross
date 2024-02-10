@@ -3,11 +3,12 @@
 #include "fileInput.h"
 #include "raylib.h"
 
-textButton::textButton(Vector2 location, Vector2 dimensions, std::string displayText, ElemCC::ColorVal b_colour) {
-  fileName = displayText;
+textButton::textButton(Vector2 location, Vector2 dimensions, std::string displayText, ElemCC::ColorVal b_colour, ElemCC::ColorVal t_colour) {
+  buttonText = displayText;
   done = 0;
   resize(location, dimensions);
   buttonColour = b_colour;
+  textColour = t_colour;
 }
 
 void textButton::resize(Vector2 location, Vector2 dimensions) {
@@ -38,5 +39,5 @@ void textButton::pressInputUp(int button, Vector2 mouse_pos) {
 }
 
 void textButton::draw() {
-  drawBoxWithText(removeplzExt(fileName).c_str(), size, position, 5, 3, buttonColour, ElemCC::LABEL_TEXT);
+  drawBoxWithText(buttonText.c_str(), size, position, 5, 3, buttonColour, textColour);
 }

@@ -5,6 +5,7 @@
 
 namespace MyColour { // {r,g,b,a} format
 
+// main colours
 const Color SOLID_WHITE{93, 104, 103, 255};       // White, (it's acually grey)
 const Color GREYISH{187, 176, 190, 255};          // A light grey
 const Color SUBTLE_GREY{50, 10, 57, 255};         // Also grey (close to the bluey black)
@@ -12,14 +13,17 @@ const Color LIGHT_GREY{130, 136, 133, 255};       // Even more grey
 const Color MY_RED{255, 50, 50, 255};             // At least its not grey (yet)
 const Color HIGHLIGHTER_YELLOW{255, 255, 0, 255}; // Yellow (also not grey)
 const Color BLUEY_BLACK{37, 0, 43, 255};          // Like a purpley blue-ish black
-const Color ROYALISH_GREEN{20, 135, 50, 255};     // sort of
+const Color ROYALISH_GREEN{20, 115, 50, 255};     // sort of
+const Color BACKWARDS_BLUE{75, 40, 116, 255};     // Blue in reverse
 
+// sub colours
 const Color LIQUID_WHITE{237, 243, 254, 255};   // Like solid white but melted
 const Color GREYISHER{205, 190, 210, 255};      // Another grey
 const Color SUBTLER_GREYER{45, 7, 51, 255};     // Not grey enough
 const Color LIGHTERER_GREY{160, 166, 163, 255}; // Why do I need more grey
 const Color MY_WEAKER_RED{255, 100, 100, 255};  // I miss the grey
-const Color ROYALESS_GREEN{30, 182, 30, 255};   // Like a purpley blue-ish black
+const Color ROYALESS_GREEN{30, 152, 30, 255};   // Like a purpley blue-ish black
+const Color FORWARDS_BLUE{85, 40, 172, 255};    // Blue but not in reverse
 
 } // namespace MyColour
 
@@ -33,7 +37,8 @@ enum ColorVal : int {
   BACKGROUND_FILL, // 4
   GRID_LINES,      // 5
   LABEL_TEXT,      // 6
-  WIN_BOX          // 7
+  WIN_BOX,         // 7
+  Back_BUTTON      // 8
 };
 
 // The main color of an element,
@@ -47,7 +52,8 @@ const Color COLOUR_LOOKUP[] = {
     MyColour::BLUEY_BLACK,        // Background Fill
     MyColour::LIGHT_GREY,         // Grid Line
     MyColour::SOLID_WHITE,        // Label Text
-    MyColour::ROYALISH_GREEN      // Win box
+    MyColour::ROYALISH_GREEN,     // Win box
+    MyColour::BACKWARDS_BLUE      // Back Button
 };
 
 // A secondary color for inside fills
@@ -60,7 +66,8 @@ const Color SUB_LOOKUP[] = {
     MyColour::BLUEY_BLACK,        // Background Fill
     MyColour::LIGHTERER_GREY,     // Grid Line
     MyColour::LIQUID_WHITE,       // Label Text
-    MyColour::ROYALESS_GREEN      // Win box
+    MyColour::ROYALESS_GREEN,     // Win box
+    MyColour::FORWARDS_BLUE       // Back button
 
 };
 

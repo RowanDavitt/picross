@@ -31,11 +31,11 @@ void grid2D::calculateGridSize(Vector2 loc, Vector2 space, Vector2 board_size, V
 // if the number of cells in the grid change this function can be called to clear the grid and remake it
 void grid2D::buildGrid() {
   Vector2 curr = origin;
-  for (std::size_t i = 0; i < cell_num.y; i++) {
+  for (size_t i = 0; i < cell_num.y; i++) {
     if (i >= cells.size()) {
       cells.emplace_back();
     }
-    for (std::size_t j = 0; j < cell_num.x; j++) {
+    for (size_t j = 0; j < cell_num.x; j++) {
       if (j >= cells[i].size()) {
         cells[i].emplace_back(addVec(curr, line_thickness / 2), addVec(spacing, -line_thickness));
       } else {

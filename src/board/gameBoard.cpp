@@ -6,10 +6,13 @@
 gameBoard::gameBoard(std::vector<std::vector<bool>> *input_puzzle) {
   puzzle = input_puzzle;
   calculateGameBoard();
+  backButtonSize = setBothVec((float)label_height * 0.75);
 
   grid = new grid2D(origin, spacing, board_size, num_cells);
   labels = labelSet(origin, spacing, num_cells, label_height, grid->line_thickness, input_puzzle);
+  backButton = new textButton(addVec(origin, -label_height), backButtonSize, "Back", ElemCC::ColorVal::Back_BUTTON, ElemCC::ColorVal::LABEL_TEXT);
   inputter.addRegion(grid);
+  inputter.addRegion(backButton);
 }
 
 // Recalculate the position and dimesnsions of the baords contents, adjust for a change to the board
@@ -20,6 +23,7 @@ void gameBoard::recalculateElements() {
   grid->recalculateCellSize();
 
   labels.calculateSize(origin, spacing, num_cells, label_height, grid->line_thickness);
+  backButton->resize(addVec(origin, -label_height), backButtonSize);
 }
 
 // calculate the position and dimensions and location of the board
@@ -35,43 +39,56 @@ void gameBoard::calculateGameBoard() {
     num_cells = {(float)(*puzzle)[0].size(), (float)(*puzzle).size()};
   }
 
-  origin = {(((GetScreenWidth() - grid_base) / 2) + grid_margin + label_height),
-            (((GetScreenHeight() - grid_base) / 2) + grid_margin + label_height)};
-
-  board_size = {(float)(GetScreenWidth() - ((2 * grid_margin) + label_height)),
-                (float)(GetScreenHeight() - ((2 * grid_margin) + label_height))};
+  Vector2 screen_dim = {(float)GetScreenWidth(), (float)GetScreenHeight()};
+  origin = addVec(divVec(addVec(screen_dim, -grid_base), 2), grid_margin + label_height);
+  board_size = addVec(screen_dim, -((2 * grid_margin) + label_height));
 
   spacing = doubleMinMag(divVec(board_size, num_cells));
   board_size = scaleVec(num_cells, spacing);
-  origin = {(((GetScreenWidth() - board_size.x) + label_height) / 2),
-            (((GetScreenHeight() - board_size.y) + label_height) / 2)};
+  origin = divVec(addVec(subVec(screen_dim, board_size), label_height), 2);
+  backButtonSize = setBothVec(((float)label_height) * 0.85);
 }
 
 // Draw the board and all it's contents (includes labels)
 void gameBoard::drawGameBoard() {
+  drawBackButton();
   labels.drawXLabel();
   labels.drawYLabel();
   grid->drawGrid2D();
   if (checkWin()) {
+    if (!won) {
+      inputter.clearAreas();
+      inputter.addRegion(backButton);
+      won = 1;
+      blockRemaining();
+    }
     displayWin();
   }
 }
 
+void gameBoard::drawBackButton() {
+  backButton->draw();
+}
+
 void gameBoard::displayWin() {
-  Vector2 size{((float)GetScreenWidth() * (float)0.4), ((float)GetScreenHeight() * (float)0.4)};
-  Vector2 pos{((float)GetScreenWidth() * (float)0.5), ((float)GetScreenHeight() * (float)0.5)};
-  float thick = size.x / 25;
-  pos = subVec(pos, divVec(size, 2));
+  Vector2 screen_dim = {(float)GetScreenWidth(), (float)GetScreenHeight()};
+  Vector2 size = scaleVec(screen_dim, 0.4);
+  Vector2 pos = origin;
+  pos.y -= label_height;
+  size.y = label_height * 0.85;
+  size.x = board_size.x;
+
+  float thick = minVec(size) / 20;
   drawBoxWithText(WIN_MESSAGE, size, pos, thick, thick, ElemCC::ColorVal::WIN_BOX, ElemCC::ColorVal::LABEL_TEXT);
 }
 
 // create a 2d boolean vector desribing the state of the current board
 std::vector<std::vector<bool>> gameBoard::getBoardState() {
   std::vector<std::vector<bool>> b_state;
-  for (unsigned int y = 0; y < grid->cells.size(); y++) {
+  for (size_t y = 0; y < grid->cells.size(); y++) {
     b_state.push_back(std::vector<bool>());
 
-    for (unsigned int x = 0; x < grid->cells[y].size(); x++) {
+    for (size_t x = 0; x < grid->cells[y].size(); x++) {
       b_state[y].push_back(grid->cells[y][x].painted == ElemCC::ColorVal::CELL_FILL);
     }
   }
@@ -82,20 +99,44 @@ std::vector<std::vector<bool>> gameBoard::getBoardState() {
 bool gameBoard::checkWin() {
   std::vector<std::vector<bool>> b_state = getBoardState();
   bool win = true;
-  for (unsigned int y = 0; y < b_state.size(); y++) {
-    for (unsigned int x = 0; x < b_state[y].size(); x++) {
+  for (size_t y = 0; y < b_state.size(); y++) {
+    for (size_t x = 0; x < b_state[y].size(); x++) {
       win = win && (b_state[y][x] == (*puzzle)[y][x]);
     }
   }
   return win;
 }
 
-void gameBoard::boardFrame() {
+int gameBoard::boardFrame() {
   if (IsWindowResized()) {
     recalculateElements();
   }
-  if (!checkWin()) {
-    inputter.checkClick();
+  inputter.checkClick();
+  if (backButton->done) {
+    return EXIT_SUCCESS;
   }
   drawGameBoard();
+  return EXIT_FAILURE;
+}
+
+void gameBoard::reset() {
+  won = 0;
+  backButton->done = 0;
+  calculateGameBoard();
+  backButtonSize = setBothVec((float)label_height * 0.75);
+
+  grid = new grid2D(origin, spacing, board_size, num_cells);
+  labels = labelSet(origin, spacing, num_cells, label_height, grid->line_thickness, puzzle);
+  inputter.addRegion(grid);
+  recalculateElements();
+}
+
+void gameBoard::blockRemaining() {
+  for (size_t y = 0; y < grid->cells.size(); y++) {
+    for (size_t x = 0; x < grid->cells[y].size(); x++) {
+      if (grid->cells[y][x].painted == ElemCC::ColorVal::CELL_EMPTY) {
+        grid->cells[y][x].painted = ElemCC::ColorVal::CELL_BLOCK;
+      }
+    }
+  }
 }

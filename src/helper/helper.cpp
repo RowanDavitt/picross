@@ -36,7 +36,7 @@ Vector2 getMaxFontBox(Font font) {
   return Vector2{max_rec.width, max_rec.height};
 }
 
-Vector2 addVec(Vector2 v1, int cons) {
+Vector2 addVec(Vector2 v1, float cons) {
   v1.x += cons;
   v1.y += cons;
   return v1;
@@ -54,7 +54,7 @@ Vector2 subVec(Vector2 v1, Vector2 v2) {
   return v1;
 }
 
-Vector2 scaleVec(Vector2 v1, int cons) {
+Vector2 scaleVec(Vector2 v1, float cons) {
   v1.x *= cons;
   v1.y *= cons;
   return v1;
@@ -97,7 +97,7 @@ Vector2 divVec(Vector2 v1, Vector2 v2) {
   return Vector2{v1.x / v2.x, v1.y / v2.y};
 }
 
-Vector2 divVec(Vector2 v1, int cons) {
+Vector2 divVec(Vector2 v1, float cons) {
   return Vector2{v1.x / cons, v1.y / cons};
 }
 

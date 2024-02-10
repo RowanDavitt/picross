@@ -9,16 +9,16 @@ int getSign(int a);
 bool colourEquals(Color c1, Color c2);
 Vector2 getMaxFontBox(Font font);
 
-Vector2 addVec(Vector2 v1, int cons);
+Vector2 addVec(Vector2 v1, float cons);
 Vector2 addVec(Vector2 v1, Vector2 v2);
 Vector2 subVec(Vector2 v1, Vector2 v2);
-Vector2 scaleVec(Vector2 v1, int cons);
 Vector2 signVec(Vector2 v1);
 Vector2 keepMaxMag(Vector2 v1);
 Vector2 doubleMaxMag(Vector2 v1);
 Vector2 doubleMinMag(Vector2 v1);
 Vector2 divVec(Vector2 v1, Vector2 v2);
-Vector2 divVec(Vector2 v1, int cons);
+Vector2 divVec(Vector2 v1, float cons);
+Vector2 scaleVec(Vector2 v1, float cons);
 Vector2 scaleVec(Vector2 v1, Vector2 v2);
 Vector2 setBothVec(float a);
 

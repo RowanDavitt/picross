@@ -19,5 +19,6 @@ public:
   void inputDownRegions(int button, Vector2 loc);
   void inputUpRegions(int button, Vector2 loc);
   void addRegion(inputArea *region);
+  void clearAreas();
 };
 #endif

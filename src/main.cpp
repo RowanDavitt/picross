@@ -110,12 +110,16 @@ static void UpdateDrawFrame(void) {
   BeginMode2D(camera);
   if (plzload.done) {
     if (!set) {
-      board.calculateGameBoard();
-      board.recalculateElements();
+      board.reset();
       set = true;
     }
-    board.boardFrame();
+    plzload.done = board.boardFrame();
   } else {
+    if (set) {
+      set = false;
+      plzload.puzzle->clear();
+      plzload.resize();
+    }
     plzload.LoadPageFrame();
   }
 

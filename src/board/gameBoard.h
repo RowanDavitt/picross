@@ -3,6 +3,7 @@
 #include "grid2D.h"
 #include "helper/ColorConsts.h"
 #include "input/inputHandler.h"
+#include "input/textButton.h"
 #include "labelSet.h"
 #include "raylib.h"
 
@@ -11,7 +12,7 @@ class gameBoard {
 public:
   const char *WIN_MESSAGE = "Win";
   Vector2 spacing;
-  Vector2 origin;
+  Vector2 origin = {0, 0};
   Vector2 grid_size;
   Vector2 board_size;
   Vector2 grid_origin;
@@ -24,6 +25,9 @@ public:
   int grid_margin;
   std::vector<std::vector<bool>> *puzzle;
   inputHandler inputter = inputHandler();
+  Vector2 backButtonSize = {0, 0};
+  textButton *backButton = nullptr;
+  int won = 0;
 
   gameBoard(std::vector<std::vector<bool>> *input_puzzle);
   gameBoard() {}
@@ -32,8 +36,11 @@ public:
   void drawGameBoard();
   std::vector<std::vector<bool>> getBoardState();
   bool checkWin();
-  void boardFrame();
+  int boardFrame();
   void displayWin();
+  void drawBackButton();
+  void reset();
+  void blockRemaining();
 };
 
 #endif

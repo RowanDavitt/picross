@@ -19,7 +19,7 @@ void puzzleLoader::makeOptionList() {
   buttonListSize = fileList.size();
 
   for (size_t i = 0; i < buttonListSize; i++) {
-    fileButtonList.emplace_back(pos, size, fileList[i], ElemCC::ColorVal::GRID_LINES);
+    fileButtonList.emplace_back(pos, size, removeplzExt(fileList[i]), ElemCC::ColorVal::GRID_LINES, ElemCC::ColorVal::LABEL_TEXT);
     inputter.addRegion(&(fileButtonList.back()));
     pos.y += text_Y_increment;
   }
@@ -51,8 +51,9 @@ void puzzleLoader::checkInputs() {
   inputter.checkClick();
   for (std::list<textButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
     if (BlistIter->done) {
-      readPuzzleFile(inputDirect + BlistIter->fileName, puzzle);
+      readPuzzleFile(inputDirect + BlistIter->buttonText + puzzleExt, puzzle);
       done = 1;
+      BlistIter->done = 0;
       return;
     }
   }
@@ -73,7 +74,8 @@ void puzzleLoader::resize() {
 
 void puzzleLoader::drawTitle() {
   float text_Y_loc_increment = (GetScreenHeight() / (3 + fileList.size()));
-  float text_X_loc = ((GetScreenWidth() - MeasureText(selectTitle.c_str(), text_Y_loc_increment / 2)) / 2) + 3;
+  Vector2 textboxSize = {(float)min(MeasureText(selectTitle.c_str(), text_Y_loc_increment), GetScreenWidth() * 0.75), text_Y_loc_increment};
+  float text_X_loc = ((GetScreenWidth() - textboxSize.x) / 2);
   Vector2 textLoc = {text_X_loc, text_Y_loc_increment};
-  DrawSuperText(selectTitle.c_str(), textLoc, 0, text_Y_loc_increment / 2, 3, ElemCC::LABEL_TEXT);
+  drawBoxWithText(selectTitle.c_str(), textboxSize, textLoc, 0, 3, ElemCC::ColorVal::BACKGROUND_FILL, ElemCC::ColorVal::LABEL_TEXT);
 }

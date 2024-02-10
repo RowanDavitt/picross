@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 class puzzleLoader {
-  std::string selectTitle = "Select a File";
+  std::string selectTitle = "Select a Puzzle";
   std::vector<std::string> fileList;
   std::list<textButton> fileButtonList;
   inputHandler inputter = inputHandler();

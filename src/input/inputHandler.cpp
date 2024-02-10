@@ -49,3 +49,7 @@ void inputHandler::checkClick() {
     }
   }
 }
+
+void inputHandler::clearAreas() {
+  regions.clear();
+}
