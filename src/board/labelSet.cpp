@@ -9,8 +9,10 @@ labelSet::labelSet(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_
 }
 
 void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, int label_height, float l_thick) {
+  labelHeight = label_height;
   max_size.y = 0;
   max_size.x = 0;
+  stack_spacing = label_height * STACK_SPACING_RATIO;
   if (!puzzle->empty()) {
 
     for (size_t i = 0; i < puzzle->size(); i++) {
@@ -25,24 +27,19 @@ void labelSet::calculateSize(Vector2 loc, Vector2 l_spacing, Vector2 num_cells, 
     }
     for (size_t i = 0; i < puzzle->size(); i++) {
       makeLabelY(i);
-      if (y_labels[i].size() > max_size.y) max_size.y = y_labels[i].size();
+      max_size.y = max(y_labels[i].size(), max_size.y);
     }
     for (size_t i = 0; i < (*puzzle)[0].size(); i++) {
       makeLabelX(i);
-      if (x_labels[i].size() > max_size.x) max_size.x = x_labels[i].size();
+      max_size.x = max(x_labels[i].size(), max_size.x);
     }
   }
   cell_num = num_cells;
   line_thick = l_thick;
   spacing = l_spacing;
-  off = addVec(loc, -line_thick / 2);
-
-  // char_size = getFontSize((spacing.x / max_size.y) - (max_size.y * STACK_SPACING), GetFontDefault());
-
-  Vector2 char_prop = getMaxFontBox(GetFontDefault());
-  char_size.y = (label_height / max_size.y) - STACK_SPACING;
-  char_size.x = char_size.y * (char_prop.x / char_prop.y);
-  char_outline = char_size.y / CHAR_OUTLINE_RATIO;
+  off = loc;
+  char_box = min((labelHeight - stack_spacing) / maxVec(max_size), minVec(spacing));
+  char_outline = char_box / CHAR_OUTLINE_RATIO;
 }
 
 void labelSet::makeLabelX(size_t col) {
@@ -80,35 +77,33 @@ void labelSet::makeLabelY(size_t row) {
 
 void labelSet::drawYLabel() {
   Vector2 curr = off;
-  curr.y += (spacing.y - char_size.y + line_thick) / 2;
+  curr.y += ((spacing.y - char_box + line_thick) / 2);
+  curr.x -= stack_spacing;
 
   for (std::vector<int> row : y_labels) {
     for (int i = row.size() - 1; i >= 0; i--) {
       std::string text = std::to_string(row[i]);
-      int c_offset = MeasureText(text.c_str(), char_size.y);
-      curr.x -= char_size.x;
-      DrawSuperText(text.c_str(), curr, -c_offset / 2, char_size.y, char_outline, text_colour);
-      curr.x -= STACK_SPACING;
+      // curr.x -= c_offset;
+      curr.x -= char_box;
+      drawTextInBound(text.c_str(), setBothVec(char_box), curr, char_outline, 1, text_colour);
     }
-    curr.x = off.x;
+    curr.x = off.x - stack_spacing;
     curr.y += spacing.y;
   }
 }
 
 void labelSet::drawXLabel() {
   Vector2 curr = off;
-  curr.x += (spacing.x + line_thick) / 2;
-  curr.y -= 0.5 * char_size.y;
+  curr.x += (line_thick) / 2;
+  curr.y -= stack_spacing;
 
   for (std::vector<int> col : x_labels) {
     for (int i = col.size() - 1; i >= 0; i--) {
       std::string text = std::to_string(col[i]);
-      int c_offset = MeasureText(text.c_str(), char_size.y);
-      curr.y -= char_size.y;
-      DrawSuperText(text.c_str(), curr, -c_offset / 2, char_size.y, char_outline, text_colour);
-      curr.y -= STACK_SPACING;
+      curr.y -= char_box;
+      drawTextInBound(text.c_str(), setBothVec(char_box), curr, char_outline, 1, text_colour);
     }
-    curr.y = off.y - 0.5 * char_size.y;
+    curr.y = off.y - stack_spacing;
     curr.x += spacing.x;
   }
 }

@@ -63,6 +63,9 @@ int main() {
 
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(screenWidth, screenHeight, "Picross?");
+  Image img = LoadImage("resources\\Capture6.png");
+  SetWindowIcon(img);
+
   camera.offset = Vector2{0, 0};
   // camera.rotation = 90;
   camera.zoom = 1.0;

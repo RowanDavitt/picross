@@ -29,7 +29,6 @@ int puzzleLoader::LoadPageFrame() {
   if (IsWindowResized()) {
     resize();
   }
-  // DrawText((std::to_string(temp)).c_str(), 10, 80, 20, WHITE);
 
   drawTitle();
   drawList();
@@ -38,9 +37,6 @@ int puzzleLoader::LoadPageFrame() {
 }
 
 void puzzleLoader::drawList() {
-  // for (size_t i = 0; i < buttonListSize; i++) {
-  //   fileButtonList[i].draw();
-  // }
   for (std::list<textButton>::iterator BlistIter = fileButtonList.begin(); BlistIter != fileButtonList.end(); ++BlistIter) {
     BlistIter->draw();
   }

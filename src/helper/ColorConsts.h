@@ -10,18 +10,19 @@ const Color SOLID_WHITE{93, 104, 103, 255};       // White, (it's acually grey)
 const Color GREYISH{187, 176, 190, 255};          // A light grey
 const Color SUBTLE_GREY{50, 10, 57, 255};         // Also grey (close to the bluey black)
 const Color LIGHT_GREY{130, 136, 133, 255};       // Even more grey
-const Color MY_RED{255, 50, 50, 255};             // At least its not grey (yet)
+const Color MY_RED{198, 14, 46, 255};             // At least its not grey (yet)
 const Color HIGHLIGHTER_YELLOW{255, 255, 0, 255}; // Yellow (also not grey)
 const Color BLUEY_BLACK{37, 0, 43, 255};          // Like a purpley blue-ish black
 const Color ROYALISH_GREEN{20, 115, 50, 255};     // sort of
 const Color BACKWARDS_BLUE{75, 40, 116, 255};     // Blue in reverse
+const Color SECRET_BLACK{18, 0, 20, 255};         // shhhhhhhhhh
 
 // sub colours
 const Color LIQUID_WHITE{237, 243, 254, 255};   // Like solid white but melted
 const Color GREYISHER{205, 190, 210, 255};      // Another grey
 const Color SUBTLER_GREYER{45, 7, 51, 255};     // Not grey enough
 const Color LIGHTERER_GREY{160, 166, 163, 255}; // Why do I need more grey
-const Color MY_WEAKER_RED{255, 100, 100, 255};  // I miss the grey
+const Color MY_WEAKER_RED{253, 70, 142, 255};   // I miss the grey
 const Color ROYALESS_GREEN{30, 152, 30, 255};   // Like a purpley blue-ish black
 const Color FORWARDS_BLUE{85, 40, 172, 255};    // Blue but not in reverse
 

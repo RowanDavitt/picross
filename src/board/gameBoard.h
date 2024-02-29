@@ -19,7 +19,7 @@ public:
   Vector2 num_cells;
   grid2D *grid = new grid2D();
   labelSet labels;
-  constexpr static float LABEL_HEIGHT_RATIO = 5; // to calculate label height relative to grid size
+  constexpr static float LABEL_HEIGHT_RATIO = 4; // to calculate label height relative to grid size
   const static int GRID_MARGIN_RATIO = 15;       // ratio to calculate distance from edge of screen to grid
   int label_height;
   int grid_margin;
@@ -41,6 +41,7 @@ public:
   void drawBackButton();
   void reset();
   void blockRemaining();
+  void unblockRemaining();
 };
 
 #endif

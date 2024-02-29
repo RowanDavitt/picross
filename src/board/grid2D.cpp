@@ -1,6 +1,7 @@
 #include "grid2D.h"
 #include "helper/helper.h"
 #include "helper/outlinedDraw.h"
+#include "math.h"
 #include <string>
 
 // A grid made up of a collection if cells
@@ -95,6 +96,13 @@ void grid2D::drawGrid2D() {
   }
 
   drawOutlineGridLines2D(origin, grid_size, cell_num, line_marg, line_thickness, colour);
+  float cellsPerGuide = 5;
+  if (cellsPerGuide < maxVec(cell_num) && maxVec(cell_num) < (cellsPerGuide * 2)) {
+    cellsPerGuide = maxVec(cell_num) / 2;
+  }
+  Vector2 guideCells = ceilVec(divVec(cell_num, cellsPerGuide));
+  Vector2 intSpace = scaleVec(spacing, ceil(cellsPerGuide));
+  drawGridLines2D(origin, grid_size, guideCells, intSpace, (line_thickness - (line_marg * 2)), MyColour::SECRET_BLACK);
 }
 
 void grid2D::paintHighlighted(bool clear_mode, ElemCC::ColorVal painting_colour) {

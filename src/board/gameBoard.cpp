@@ -60,7 +60,7 @@ void gameBoard::drawGameBoard() {
       inputter.clearAreas();
       inputter.addRegion(backButton);
       won = 1;
-      blockRemaining();
+      unblockRemaining();
     }
     displayWin();
   }
@@ -136,6 +136,16 @@ void gameBoard::blockRemaining() {
     for (size_t x = 0; x < grid->cells[y].size(); x++) {
       if (grid->cells[y][x].painted == ElemCC::ColorVal::CELL_EMPTY) {
         grid->cells[y][x].painted = ElemCC::ColorVal::CELL_BLOCK;
+      }
+    }
+  }
+}
+
+void gameBoard::unblockRemaining() {
+  for (size_t y = 0; y < grid->cells.size(); y++) {
+    for (size_t x = 0; x < grid->cells[y].size(); x++) {
+      if (grid->cells[y][x].painted == ElemCC::ColorVal::CELL_BLOCK) {
+        grid->cells[y][x].painted = ElemCC::ColorVal::CELL_EMPTY;
       }
     }
   }

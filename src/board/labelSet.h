@@ -12,16 +12,18 @@ private:
   std::vector<std::vector<bool>> *puzzle;
 
 public:
-  static const int STACK_SPACING = 8;
+  float STACK_SPACING_RATIO = 0.1;
   static const int CHAR_OUTLINE_RATIO = 8;
+  float stack_spacing;
   float char_outline;
   float line_thick;
   ElemCC::ColorVal text_colour = ElemCC::ColorVal::LABEL_TEXT;
   Vector2 spacing;
   Vector2 off;
   Vector2 max_size;
-  Vector2 char_size;
+  float char_box;
   Vector2 cell_num;
+  float labelHeight;
 
   labelSet(Vector2 loc, Vector2 spacing, Vector2 num_cells, int label_height, float l_thick, std::vector<std::vector<bool>> *input_puzzle);
   labelSet() {}
